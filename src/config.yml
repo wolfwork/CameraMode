@@ -1,0 +1,13 @@
+#CameraMode Version 1.0.1 Alpha
+#Developed And Maintained By xYourFreindx
+CameraMode:
+    Enabled: true
+    PlayersInCM:
+        AreInvincible: true
+        AreVanished: true
+        CanUseCommands: true
+        #Only Necessary if "CanUseCommands" is set to false.
+        AllowedCommands:
+        - camera
+        - cameramode
+        - reload
