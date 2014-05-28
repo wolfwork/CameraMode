@@ -1,0 +1,37 @@
+name: CameraMode
+main: com.gmail.justisroot.cameramode.CameraMode
+version: 1.0.1 Alpha
+
+commands:
+    cameramode:
+        usage: /cameramode
+        description: This is a test
+        aliases: [cm]
+    cameramode reload:
+        usage: /cameramode reload
+        description: Reloads config
+        aliases: [cm reload,cm save,cameramode save]
+    camera:
+        usage: /camera
+        description: puts player in cameramode
+permissions:
+    cameramode.*:
+        description: Give access to all CameraMode permissions
+        children:
+            cameramode.fly: true
+            cameramode.camera: true
+            cameramode.reload: true
+            cameramode.cameramode: true
+        default: op
+    cameramode.camera:
+        description: Gives access to safely fly
+        default: false
+    cameramode.fly:
+        description: Allows players to survival fly even when not in camera mode. (only necessary if they have safefly.fly)
+        default: op
+    cameramode.reload:
+        description: Allows access to /camera reload
+        default: op
+    cameramode.cameramode:
+        descrption: cameramode
+        default: true
