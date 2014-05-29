@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -41,6 +42,8 @@ public class CameraMode extends JavaPlugin implements Listener
 	
 	@Override
 	public void onEnable() {
+		getConfig().options().header("http://dev.bukkit.org/CameraMode/pages for config explanation");
+		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		if (getConfig().getBoolean("CameraMode.Enabled") == false) {
@@ -198,21 +201,27 @@ public class CameraMode extends JavaPlugin implements Listener
 			 }
 		}
 	
+    } 
+	 @EventHandler (priority = EventPriority.HIGHEST)
+    public void onPlayerCommandPreProccess(PlayerCommandPreprocessEvent e) {
+        if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == false) {
+                if (flyplayers.contains(e.getPlayer().getUniqueId().toString())) {
+                        if (commandIsWhitelisted(e.getMessage()) == false) {
+                                e.setCancelled(true);
+                                e.getPlayer().sendMessage(ChatColor.RED + reason);
+                                return;
+                        }
+                }
+        }
     }
-	 @EventHandler
-	 public void onPlayerCommandPreProccess(PlayerCommandPreprocessEvent e) {
-		 if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == false) {
-			 if (flyplayers.contains(e.getPlayer().getUniqueId().toString())) {
-			 	for (String commands : allowedcmds) {
-			 		if (!(e.getMessage().contains(commands))) {
-			 			e.setCancelled(true);
-			 			e.getPlayer().sendMessage(ChatColor.RED + reason);
-			 			System.out.println(allowedcmds);
-			 			return;
-			 		}
-			 	}
-			}
-		}
+
+	 private boolean commandIsWhitelisted(String playerCmd) {
+        playerCmd = playerCmd.replace("/", "");
+        for(String allowedCmd : this.allowedcmds) {
+                allowedCmd = allowedCmd.replace("/", "");
+                if(playerCmd.startsWith(allowedCmd)) return true;
+        }
+        return false;
 	}
 	 /*
 	  * *****************************
