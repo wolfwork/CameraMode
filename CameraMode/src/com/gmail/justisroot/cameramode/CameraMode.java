@@ -1,11 +1,13 @@
 package com.gmail.justisroot.cameramode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List; 
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.event.Listener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,6 +22,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
@@ -33,6 +36,7 @@ public class CameraMode extends JavaPlugin implements Listener
 {
 	public ArrayList<String> flyplayers = new ArrayList<String>();
 	public List<String> allowedcmds = this.getConfig().getStringList("CameraMode.PlayersInCM.AllowedCommands");
+	public HashMap<String, Location> locations = new HashMap<String, Location>();
 	String reason = "You are in CameraMode!";
 	
 	@Override
@@ -54,6 +58,11 @@ public class CameraMode extends JavaPlugin implements Listener
 		PluginDescriptionFile pdfFile = this.getDescription();
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been disabled");
 	}
+	/*
+	 * *************************
+	 *       Event Handlers
+	 * *************************
+	 */
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player) {
@@ -88,16 +97,20 @@ public class CameraMode extends JavaPlugin implements Listener
 	public void onPlayerGameModeChange(final PlayerGameModeChangeEvent e) {
 		String player = e.getPlayer().getUniqueId().toString();
 		if (flyplayers.contains(player)){
-			flyplayers.remove(player);
-			CameraMode pInst = this;
-			pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-				public void run()
-				{
-			e.getPlayer().sendMessage(ChatColor.RED + "You are no longer in CameraMode!");
-				}
-			}, 2L);
-			if (e.getNewGameMode() == GameMode.SURVIVAL) {
-			e.getPlayer().setAllowFlight(false);
+				Location loc = locations.get(e.getPlayer().getUniqueId().toString());
+				if (e.getPlayer().getWorld() == loc.getWorld()) {
+					flyplayers.remove(player);
+					e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+					CameraMode pInst = this;
+					pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+					public void run() {
+					e.getPlayer().sendMessage(ChatColor.RED + "You are no longer in CameraMode!");
+					}
+					}, 2L);
+					if (e.getNewGameMode() == GameMode.SURVIVAL) {
+					e.getPlayer().setAllowFlight(false);
+					}
+				
 			}
 		}
 	}
@@ -127,7 +140,7 @@ public class CameraMode extends JavaPlugin implements Listener
 			e.getPlayer().sendMessage(ChatColor.RED + reason);
 			e.setCancelled(true);
 		}
-	}
+    }
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent e) {
 		if (getConfig().getBoolean("CameraMode.PlayersInCM.AreInvincible") == true) {
@@ -137,13 +150,13 @@ public class CameraMode extends JavaPlugin implements Listener
 				}	
 			}
 		}
-	}
+    }
 	@EventHandler
 	public void onPlayerexpChange(PlayerExpChangeEvent e) {
 		if (flyplayers.contains(e.getPlayer().getUniqueId().toString())) {
 			e.setAmount(0);
 		}
-	} 
+    } 
 	@EventHandler
 	public void onEntityTarget(EntityTargetEvent e){
 		if (getConfig().getBoolean("CameraMode.PlayersInCM.AreInvincible") == true) {
@@ -156,35 +169,56 @@ public class CameraMode extends JavaPlugin implements Listener
 		}
 	}
 	 @EventHandler
-	    public void onFoodLevelChange(FoodLevelChangeEvent e) {
+	 public void onFoodLevelChange(FoodLevelChangeEvent e) {
 		 if (e.getEntity() instanceof Player) {
 			if (flyplayers.contains(e.getEntity().getUniqueId().toString())) {
 				e.setCancelled(true);
 			}
-		 }
-	 }
+		}
+	}
 	 @EventHandler
-	    public void onPlayerRegainHealth(EntityRegainHealthEvent e) {
-		 if (e.getEntity() instanceof Player)
+	 public void onPlayerRegainHealth(EntityRegainHealthEvent e) {
+		 if (e.getEntity() instanceof Player) {
 			 if (flyplayers.contains(e.getEntity().getUniqueId().toString())) {
 				 if (e.getRegainReason() == RegainReason.SATIATED) {
 					 e.setCancelled(true); 
 				 }
 	        }
-	    }
+		 }
+	}
 	 @EventHandler
-	 	public void onPlayerCommandPreProccess(PlayerCommandPreprocessEvent e) {
-		 if (getConfig().getBoolean("CameraMode.PlayersInMC.CanUseCommands") == false) {
+	 public void onPlayerChangeWorld(PlayerChangedWorldEvent e) {
+		 if (getConfig().getBoolean("CameraMode.PlayersInCM.CanChangeWorlds") == false) {
+			 if (flyplayers.contains(e.getPlayer().getUniqueId().toString())) {
+				Location loc = locations.get(e.getPlayer().getUniqueId().toString());
+				e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+				if (!(e.getFrom() == loc.getWorld())) {
+					e.getPlayer().sendMessage(ChatColor.RED +  "You Cannot Change Worlds While In CameraMode!");
+				}
+			 }
+		}
+	
+    }
+	 @EventHandler
+	 public void onPlayerCommandPreProccess(PlayerCommandPreprocessEvent e) {
+		 if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == false) {
 			 if (flyplayers.contains(e.getPlayer().getUniqueId().toString())) {
 			 	for (String commands : allowedcmds) {
 			 		if (!(e.getMessage().contains(commands))) {
 			 			e.setCancelled(true);
 			 			e.getPlayer().sendMessage(ChatColor.RED + reason);
+			 			System.out.println(allowedcmds);
+			 			return;
 			 		}
 			 	}
-			 }
-		 }
-	 }
+			}
+		}
+	}
+	 /*
+	  * *****************************
+	  *            Commands
+	  * *****************************
+	  */
 	public boolean onCommand(CommandSender sender, Command cmd, String StringLabel, String[] args)
 	{
 	if (cmd.getName().equalsIgnoreCase("cameramode")) {
@@ -245,6 +279,8 @@ public class CameraMode extends JavaPlugin implements Listener
 					String target = ((Player) sender).getUniqueId().toString();
 					if(flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
 						((Player) sender).setAllowFlight(false);
+						Location loc = locations.get(p.getUniqueId().toString());
+						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						flyplayers.remove(target);
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
@@ -252,12 +288,15 @@ public class CameraMode extends JavaPlugin implements Listener
 						}
 					}else if (flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
 						flyplayers.remove(target);
+						Location loc = locations.get(p.getUniqueId().toString());
+						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
 						}
 					}else{
 						flyplayers.add(target);
+						locations.put(p.getUniqueId().toString(), p.getLocation());
 						((Player) sender).setAllowFlight(true);
 						sender.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
 						if (getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {

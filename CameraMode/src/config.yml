@@ -5,6 +5,7 @@ CameraMode:
     PlayersInCM:
         AreInvincible: true
         AreVanished: true
+        CanChangeWorlds: true
         CanUseCommands: true
         #Only Necessary if "CanUseCommands" is set to false.
         AllowedCommands:
@@ -12,3 +13,6 @@ CameraMode:
         - cameramode
         - reload
         - save-all
+        
+        
+        
