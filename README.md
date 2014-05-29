@@ -14,9 +14,17 @@ CameraMode will optionally block...
 
 
 -Block Interaction
+
+
 -pvp
+
+
 -entity interaction
+
+
 -commands
+
+
 -and many more.
 
 
