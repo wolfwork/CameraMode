@@ -11,19 +11,13 @@ and view areas of the server normally hidden from view, without being able to ex
 the fly ability (ussually an unavoidable risk on the server owner's part [great for youtube ranks]).
 CameraMode will optionally block...
 
-
-
 -Block Interaction
-
 
 -pvp
 
-
 -entity interaction
 
-
 -commands
-
 
 -and many more.
 
