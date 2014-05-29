@@ -270,7 +270,7 @@ public class CameraMode extends JavaPlugin implements Listener
 					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to CameraMode!");
 				}
 			}else{
-				getLogger().info("Usage: /camera <player>");
+				getLogger().info("Usage: /camera <player> ");
 			}
 		}else if (args.length == 1) {
 			if (sender instanceof Player) {
