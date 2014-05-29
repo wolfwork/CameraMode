@@ -37,7 +37,6 @@ public class CameraMode extends JavaPlugin implements Listener
 	
 	@Override
 	public void onEnable() {
-		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		if (getConfig().getBoolean("CameraMode.Enabled") == false) {
