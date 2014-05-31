@@ -37,6 +37,7 @@ import org.bukkit.projectiles.ProjectileSource;
 
 public class CameraMode extends JavaPlugin implements Listener {
 	public ArrayList<String> flyplayers = new ArrayList<String>();
+	public HashMap<String, Integer> fireticks = new HashMap<String, Integer>();
 	public ArrayList<String> pause = new ArrayList<String>();
 	public List<String> allowedcmds = this.getConfig().getStringList("CameraMode.PlayersInCM.AllowedCommands");
 	public HashMap<String, Location> locations = new HashMap<String, Location>();
@@ -143,6 +144,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 		if (getConfig().getBoolean("CameraMode.PlayersInCM.AreInvincible") == true) {
 			if (e.getEntity() instanceof Player) {
 				if (flyplayers.contains(e.getEntity().getUniqueId().toString())) {
+					e.getEntity().setFireTicks(0);
 					e.setCancelled(true);
 				}	
 			}
@@ -183,28 +185,29 @@ public class CameraMode extends JavaPlugin implements Listener {
 	        }
 		 }
 	}
-		@EventHandler
-		public void onPlayerGameModeChange(final PlayerGameModeChangeEvent e) {
-			final String player = e.getPlayer().getUniqueId().toString();
-			if (flyplayers.contains(player)){
-					Location loc = locations.get(e.getPlayer().getUniqueId().toString());
-					if (e.getPlayer().getWorld() == loc.getWorld()) {
-						flyplayers.remove(player);
-						e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-						CameraMode pInst = this;
-						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-						public void run() {
-						e.getPlayer().sendMessage(ChatColor.RED + "You are no longer in CameraMode!");
-						flyplayers.remove(player);
-						}
-						}, 20L);
-						if (e.getNewGameMode() == GameMode.SURVIVAL) {
-						e.getPlayer().setAllowFlight(false);
-						}
-					
+	 @EventHandler
+	 public void onPlayerGameModeChange(final PlayerGameModeChangeEvent e) {
+		final String player = e.getPlayer().getUniqueId().toString();
+		if (flyplayers.contains(player)){
+			Location loc = locations.get(e.getPlayer().getUniqueId().toString());
+			if (e.getPlayer().getWorld() == loc.getWorld()) {
+				flyplayers.remove(player);
+				e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+				CameraMode pInst = this;
+				pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+				public void run() {
+				e.getPlayer().sendMessage(ChatColor.RED + "You are no longer in CameraMode!");
+				flyplayers.remove(player);
+				}
+				}, 10L);
+				int Fireup = fireticks.get(e.getPlayer().getUniqueId().toString()).intValue();
+				e.getPlayer().setFireTicks(Fireup);
+				if (e.getNewGameMode() == GameMode.SURVIVAL) {
+				e.getPlayer().setAllowFlight(false);
 				}
 			}
 		}
+	}
 	 @EventHandler
 	 public void onPlayerChangeWorld(final PlayerChangedWorldEvent e) {
 		 if (getConfig().getBoolean("CameraMode.PlayersInCM.CanChangeWorlds") == false) {
@@ -318,8 +321,10 @@ public class CameraMode extends JavaPlugin implements Listener {
 						public void run() {
 						flyplayers.remove(target);
 						}
-						}, 20L);
+						}, 10L);
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+						int Fireup = fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
+						((Player) sender).setFireTicks(Fireup);
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
 						}
@@ -329,7 +334,9 @@ public class CameraMode extends JavaPlugin implements Listener {
 						public void run() {
 						flyplayers.remove(target);
 						}
-						}, 20L);
+						}, 10L);
+						int Fireup = fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
+						((Player) sender).setFireTicks(Fireup);
 						Location loc = locations.get(p.getUniqueId().toString());
 						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
@@ -340,6 +347,8 @@ public class CameraMode extends JavaPlugin implements Listener {
 						flyplayers.add(target);
 						locations.put(p.getUniqueId().toString(), p.getLocation());
 						((Player) sender).setAllowFlight(true);
+						fireticks.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getFireTicks());
+						((Player) sender).setFireTicks(0);
 						sender.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
 						if (getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
 							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
