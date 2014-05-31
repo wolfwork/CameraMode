@@ -190,21 +190,31 @@ public class CameraMode extends JavaPlugin implements Listener {
 		final String player = e.getPlayer().getUniqueId().toString();
 		if (flyplayers.contains(player)){
 			Location loc = locations.get(e.getPlayer().getUniqueId().toString());
-			if (e.getPlayer().getWorld() == loc.getWorld()) {
-				flyplayers.remove(player);
-				e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+			if (!pause.contains(e.getPlayer().getUniqueId().toString())) {
+				if (e.getPlayer().getWorld() == loc.getWorld()) {
+					flyplayers.remove(player);
+					e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+					CameraMode pInst = this;
+					pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+					public void run() {
+					e.getPlayer().sendMessage(ChatColor.RED + "You are no longer in CameraMode!");
+					flyplayers.remove(player);
+					}
+					}, 10L);
+					int Fireup = fireticks.get(e.getPlayer().getUniqueId().toString()).intValue();
+					e.getPlayer().setFireTicks(Fireup);
+					if (e.getNewGameMode() == GameMode.SURVIVAL) {
+					e.getPlayer().setAllowFlight(false);
+					}
+				}
+			}else{
 				CameraMode pInst = this;
 				pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 				public void run() {
-				e.getPlayer().sendMessage(ChatColor.RED + "You are no longer in CameraMode!");
-				flyplayers.remove(player);
+					e.getPlayer().setAllowFlight(true);
 				}
 				}, 10L);
-				int Fireup = fireticks.get(e.getPlayer().getUniqueId().toString()).intValue();
-				e.getPlayer().setFireTicks(Fireup);
-				if (e.getNewGameMode() == GameMode.SURVIVAL) {
-				e.getPlayer().setAllowFlight(false);
-				}
+				e.setCancelled(true);
 			}
 		}
 	}
@@ -212,19 +222,20 @@ public class CameraMode extends JavaPlugin implements Listener {
 	 public void onPlayerChangeWorld(final PlayerChangedWorldEvent e) {
 		 if (getConfig().getBoolean("CameraMode.PlayersInCM.CanChangeWorlds") == false) {
 			 if (flyplayers.contains(e.getPlayer().getUniqueId().toString())) {
-					CameraMode pInst = this;
-					pause.add(e.getPlayer().getUniqueId().toString());
-					pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-					public void run() {
-						pause.remove(e.getPlayer().getUniqueId().toString());
-					}
-					}, 3L);
 				Location loc = locations.get(e.getPlayer().getUniqueId().toString());
 				e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 				if (!(e.getFrom() == loc.getWorld())) {
 					e.getPlayer().sendMessage(ChatColor.RED +  "You Cannot Change Worlds While In CameraMode!");
 				}
-			 }
+			}
+		}else{
+			CameraMode pInst = this;
+			pause.add(e.getPlayer().getUniqueId().toString());
+			pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+			public void run() {
+				pause.remove(e.getPlayer().getUniqueId().toString());
+			}
+			}, 50L);
 		}
 	
     } 
