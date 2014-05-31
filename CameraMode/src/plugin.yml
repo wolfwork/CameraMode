@@ -1,6 +1,6 @@
 name: CameraMode
 main: com.gmail.justisroot.cameramode.CameraMode
-version: 1.0.1 Alpha
+version: 1.1.2 Beta
 
 commands:
     cameramode:
