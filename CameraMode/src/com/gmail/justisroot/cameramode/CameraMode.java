@@ -20,7 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -112,7 +112,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onPlayerToggleFlight(PlayerToggleFlightEvent e) {
-	 if (e.getPlayer().hasPermission("cameramode.fly") && (!(flyplayers.contains(e.getPlayer().getUniqueId().toString()))) && e.getPlayer().getGameMode() == (GameMode.SURVIVAL)) {
+	 if (!e.getPlayer().hasPermission("cameramode.fly") && (!(flyplayers.contains(e.getPlayer().getUniqueId().toString()))) && e.getPlayer().getGameMode() == (GameMode.SURVIVAL)) {
 		 e.getPlayer().setAllowFlight(false);
 		  }
 	 if (e.getPlayer().hasPermission("cameramode.fly") && (flyplayers.contains(e.getPlayer().getUniqueId().toString())) && e.getPlayer().getAllowFlight() == (false)) {
@@ -157,7 +157,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 		}
     } 
 	@EventHandler
-	public void onEntityTarget(EntityTargetEvent e){
+	public void onEntityTarget(EntityTargetLivingEntityEvent e){
 		if (getConfig().getBoolean("CameraMode.PlayersInCM.AreInvincible") == true) {
 			if (e.getTarget() instanceof Player) {
 				if (flyplayers.contains(e.getTarget().getUniqueId().toString())){
