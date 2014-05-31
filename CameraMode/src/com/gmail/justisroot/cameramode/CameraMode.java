@@ -197,7 +197,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 						e.getPlayer().sendMessage(ChatColor.RED + "You are no longer in CameraMode!");
 						flyplayers.remove(player);
 						}
-						}, 2L);
+						}, 20L);
 						if (e.getNewGameMode() == GameMode.SURVIVAL) {
 						e.getPlayer().setAllowFlight(false);
 						}
@@ -318,7 +318,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 						public void run() {
 						flyplayers.remove(target);
 						}
-						}, 2L);
+						}, 20L);
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
@@ -329,7 +329,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 						public void run() {
 						flyplayers.remove(target);
 						}
-						}, 2L);
+						}, 20L);
 						Location loc = locations.get(p.getUniqueId().toString());
 						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
