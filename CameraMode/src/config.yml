@@ -4,7 +4,7 @@ CameraMode:
     Enabled: true
     PlayersInCM:
         AreInvincible: true
-        AreVanished: true
+        AreVanished: false
         CanChangeWorlds: true
         CanUseCommands: true
         #Only Necessary if "CanUseCommands" is set to false.

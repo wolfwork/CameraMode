@@ -5,15 +5,15 @@ version: 1.1.2 Beta
 commands:
     cameramode:
         usage: /cameramode
-        description: This is a test
+        description: Puts player in cameramode
         aliases: [cm]
-    cameramode reload:
+    camera reload:
         usage: /cameramode reload
         description: Reloads config
-        aliases: [cm reload,cm save,cameramode save]
+        aliases: [camera save]
     camera:
         usage: /camera
-        description: puts player in cameramode
+        description: opens the help page
 permissions:
     cameramode.*:
         description: Give access to all CameraMode permissions
@@ -21,10 +21,10 @@ permissions:
             cameramode.fly: true
             cameramode.camera: true
             cameramode.reload: true
-            cameramode.cameramode: true
+            cameramode.cm: true
         default: op
-    cameramode.camera:
-        description: Gives access to safely fly
+    cameramode.cm:
+        description: Gives access to cameramode
         default: false
     cameramode.fly:
         description: Allows players to survival fly even when not in camera mode. (only necessary if they have safefly.fly)
@@ -32,6 +32,6 @@ permissions:
     cameramode.reload:
         description: Allows access to /camera reload
         default: op
-    cameramode.cameramode:
-        descrption: cameramode
+    cameramode.camera:
+        description: shows available commands
         default: true

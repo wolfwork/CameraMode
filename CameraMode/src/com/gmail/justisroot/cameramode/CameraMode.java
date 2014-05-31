@@ -45,7 +45,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
-		getConfig().options().header("http://dev.bukkit.org/CameraMode/pages for config explanation");
+		getConfig().options().header("http://dev.bukkit.org/bukkit-plugins/cameramode/pages/config-yml-explained/");
 		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
@@ -256,17 +256,17 @@ public class CameraMode extends JavaPlugin implements Listener {
 	  */
 	public boolean onCommand(CommandSender sender, Command cmd, String StringLabel, String[] args)
 	{
-	if (cmd.getName().equalsIgnoreCase("cameramode")) {
+	if (cmd.getName().equalsIgnoreCase("camera")) {
 		if (args.length == 0) {
-			if (sender.hasPermission("cameramode.cameramode") || (sender.hasPermission("cameramode.reload")) || (sender.hasPermission("cameramode.camera"))) {
+			if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) && (sender.hasPermission("cameramode.camera"))) {
 				sender.sendMessage(ChatColor.AQUA + "__CameraMode Commands__");
-				sender.sendMessage(ChatColor.DARK_AQUA + "/cameramode");
+				sender.sendMessage(ChatColor.DARK_AQUA + "/Camera" + ChatColor.GRAY + "  - Displays This Help List");
 			} 
-			if (sender.hasPermission("cameramode.reload")){
-				sender.sendMessage(ChatColor.DARK_AQUA + "/cameramode reload");
+			if (sender.hasPermission("cameramode.cm")){
+				sender.sendMessage(ChatColor.DARK_AQUA + "/CameraMode" + ChatColor.GRAY + "  - Enables CameraMode");
 			}
-			if (sender.hasPermission("cameramode.camera")) {
-				sender.sendMessage(ChatColor.DARK_AQUA + "/camera");
+			if (sender.hasPermission("cameramode.reload")) {
+				sender.sendMessage(ChatColor.DARK_AQUA + "/Camera reload" + ChatColor.GRAY + "  - Reloads Configuration");
 			}
 		}else if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("reload")) {
@@ -306,11 +306,11 @@ public class CameraMode extends JavaPlugin implements Listener {
 				sender.sendMessage(ChatColor.RED + "You do not have permission!");
 		}
 	}
-	if (cmd.getName().equalsIgnoreCase("camera")) {
+	if (cmd.getName().equalsIgnoreCase("cameramode")) {
 		Player p = (Player) sender;
 		if (args.length == 0) {
 			if (sender instanceof Player) {
-				if (sender.hasPermission("cameramode.camera")) {
+				if (sender.hasPermission("cameramode.cm")) {
 					final String target = ((Player) sender).getUniqueId().toString();
 					if(flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
 						((Player) sender).setAllowFlight(false);
