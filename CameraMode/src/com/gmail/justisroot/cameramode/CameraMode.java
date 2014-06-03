@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -35,7 +36,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
 
-public class CameraMode extends JavaPlugin implements Listener {
+public class CameraMode extends JavaPlugin implements Listener implements {
 	public ArrayList<String> flyplayers = new ArrayList<String>();
 	public HashMap<String, Integer> fireticks = new HashMap<String, Integer>();
 	public ArrayList<String> pause = new ArrayList<String>();
@@ -167,6 +168,17 @@ public class CameraMode extends JavaPlugin implements Listener {
 			}
 		}
 	}
+	@EventHandler
+	public void onEntityTarget(EntityTargetEvent e){
+		if (getConfig().getBoolean("CameraMode.PlayersInCM.AreInvincible") == true) {
+			if (e.getTarget() instanceof Player) {
+				if (flyplayers.contains(e.getTarget().getUniqueId().toString())){
+					e.setCancelled(true);
+					e.setTarget(null);
+				}
+			}
+		}
+	}
 	 @EventHandler
 	 public void onFoodLevelChange(FoodLevelChangeEvent e) {
 		 if (e.getEntity() instanceof Player) {
@@ -200,7 +212,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 					e.getPlayer().sendMessage(ChatColor.RED + "You are no longer in CameraMode!");
 					flyplayers.remove(player);
 					}
-					}, 10L);
+					}, 5L);
 					int Fireup = fireticks.get(e.getPlayer().getUniqueId().toString()).intValue();
 					e.getPlayer().setFireTicks(Fireup);
 					if (e.getNewGameMode() == GameMode.SURVIVAL) {
@@ -213,7 +225,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 				public void run() {
 					e.getPlayer().setAllowFlight(true);
 				}
-				}, 10L);
+				}, 5L);
 				e.setCancelled(true);
 			}
 		}
@@ -318,10 +330,10 @@ public class CameraMode extends JavaPlugin implements Listener {
 		}
 	}
 	if (cmd.getName().equalsIgnoreCase("cameramode")) {
-		Player p = (Player) sender;
 		if (args.length == 0) {
 			if (sender instanceof Player) {
 				if (sender.hasPermission("cameramode.cm")) {
+					Player p = (Player) sender;
 					final String target = ((Player) sender).getUniqueId().toString();
 					if(flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
 						((Player) sender).setAllowFlight(false);
@@ -332,7 +344,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 						public void run() {
 						flyplayers.remove(target);
 						}
-						}, 10L);
+						}, 5L);
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						int Fireup = fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setFireTicks(Fireup);
@@ -345,7 +357,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 						public void run() {
 						flyplayers.remove(target);
 						}
-						}, 10L);
+						}, 5L);
 						int Fireup = fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setFireTicks(Fireup);
 						Location loc = locations.get(p.getUniqueId().toString());
@@ -371,7 +383,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to CameraMode!");
 				}
 			}else{
-				getLogger().info("Usage: /camera <player> ");
+				getLogger().info("Usage: /cameramode <player> ");
 			}
 		}else if (args.length == 1) {
 			if (sender instanceof Player) {
@@ -384,9 +396,4 @@ public class CameraMode extends JavaPlugin implements Listener {
 	return true;
 	}
 }
-
-
-
-
-
 

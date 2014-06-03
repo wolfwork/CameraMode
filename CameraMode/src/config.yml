@@ -1,5 +1,5 @@
-#CameraMode Version 1.0.3
-#Developed And Maintained By xYourFreindx
+# CameraMode Version 1.0.3
+# Developed And Maintained By xYourFreindx
 CameraMode:
     Enabled: true
     PlayersInCM:
@@ -7,7 +7,7 @@ CameraMode:
         AreVanished: false
         CanChangeWorlds: true
         CanUseCommands: true
-        #Only Necessary if "CanUseCommands" is set to false.
+        # Only Necessary if "CanUseCommands" is set to false.
         AllowedCommands:
         - camera
         - cameramode
