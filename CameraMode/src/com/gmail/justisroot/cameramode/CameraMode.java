@@ -36,7 +36,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
 
-public class CameraMode extends JavaPlugin implements Listener implements {
+public class CameraMode extends JavaPlugin implements Listener {
 	public ArrayList<String> flyplayers = new ArrayList<String>();
 	public HashMap<String, Integer> fireticks = new HashMap<String, Integer>();
 	public ArrayList<String> pause = new ArrayList<String>();
