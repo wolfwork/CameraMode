@@ -1,6 +1,6 @@
 name: CameraMode
 main: com.gmail.justisroot.cameramode.CameraMode
-version: 1.0.3 
+version: 1.1.3 
 
 commands:
     cameramode:
@@ -22,6 +22,7 @@ permissions:
             cameramode.camera: true
             cameramode.reload: true
             cameramode.cm: true
+            camreamode.other: true
         default: op
     cameramode.cm:
         description: Gives access to cameramode
@@ -35,3 +36,6 @@ permissions:
     cameramode.camera:
         description: shows available commands
         default: true
+    cameramode.other
+        description: Give and take CameraMode to/from other players
+        default: op

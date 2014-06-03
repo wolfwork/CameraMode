@@ -272,13 +272,15 @@ public class CameraMode extends JavaPlugin implements Listener {
         }
         return false;
 	}
+	 
 	 /*
 	  * *****************************
 	  *            Commands
 	  * *****************************
 	  */
-	public boolean onCommand(CommandSender sender, Command cmd, String StringLabel, String[] args)
-	{
+	 
+	@SuppressWarnings("deprecation")
+	public boolean onCommand(CommandSender sender, Command cmd, String StringLabel, String[] args) {
 	if (cmd.getName().equalsIgnoreCase("camera")) {
 		if (args.length == 0) {
 			if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) && (sender.hasPermission("cameramode.camera"))) {
@@ -341,9 +343,9 @@ public class CameraMode extends JavaPlugin implements Listener {
 						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						CameraMode pInst = this;
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-						public void run() {
-						flyplayers.remove(target);
-						}
+							public void run() {
+								flyplayers.remove(target);
+							}
 						}, 5L);
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						int Fireup = fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
@@ -386,11 +388,83 @@ public class CameraMode extends JavaPlugin implements Listener {
 				getLogger().info("Usage: /cameramode <player> ");
 			}
 		}else if (args.length == 1) {
+			final Player targetPlayer = Bukkit.getServer().getPlayerExact(args[0]);
+			final String superTarget = targetPlayer.getUniqueId().toString();
 			if (sender instanceof Player) {
-				if (sender.hasPermission("camera.other")) {
-					
+				if (sender.hasPermission("cameramode.other") || superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
+					if(flyplayers.contains(superTarget) && (targetPlayer).getGameMode() == (GameMode.SURVIVAL)) {
+						targetPlayer.setAllowFlight(false);
+						Location loc = locations.get(superTarget);
+						targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+						CameraMode pInst = this;
+						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+						public void run() {
+						flyplayers.remove(superTarget);
+						}
+						}, 5L);
+						targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+						targetPlayer.sendMessage(ChatColor.GOLD + "Courtacy of " + sender.toString());
+						sender.sendMessage(ChatColor.GOLD + targetPlayer.toString() + " has successfully been ejected from CameraMode");
+						int Fireup = fireticks.get(superTarget).intValue();
+						targetPlayer.setFireTicks(Fireup);
+						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+							pl.showPlayer(targetPlayer);
+						}
+					}else if (flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
+						CameraMode pInst = this;
+						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+							public void run() {
+								flyplayers.remove(targetPlayer);
+							}
+						}, 5L);
+						int Fireup = fireticks.get(superTarget).intValue();
+						(targetPlayer).setFireTicks(Fireup);
+						Location loc = locations.get(superTarget);
+						targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+						targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+						targetPlayer.sendMessage(ChatColor.GOLD + "Courtacy of " + sender.toString());
+						sender.sendMessage(ChatColor.GOLD + targetPlayer.toString() + " has successfully been ejected from CameraMode");
+						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+							pl.showPlayer(targetPlayer);
+						}
+					}else{
+					flyplayers.add(superTarget);
+					locations.put(superTarget, targetPlayer.getLocation());
+					targetPlayer.setAllowFlight(true);
+					fireticks.put(superTarget, targetPlayer.getFireTicks());
+					targetPlayer.setFireTicks(0);
+					targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
+					targetPlayer.sendMessage(ChatColor.GOLD + "Complimetns of " + sender.toString());
+					sender.sendMessage(ChatColor.GOLD + targetPlayer.toString() + " has successfully been put in CameraMode");
+						if (superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
+							sender.sendMessage(ChatColor.RED + "Try /cm next time ;)");
+						}
+						if (getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
+							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+								pl.hidePlayer(targetPlayer);
+							}
+						}
+					}
+				}else{
+					sender.sendMessage(ChatColor.RED + "You may only CameraMode yourself!");
+				}
+			}else{
+				flyplayers.add(superTarget);
+				locations.put(superTarget, targetPlayer.getLocation());
+				targetPlayer.setAllowFlight(true);
+				fireticks.put(superTarget, targetPlayer.getFireTicks());
+				targetPlayer.setFireTicks(0);
+				sender.sendMessage(ChatColor.GOLD + targetPlayer.toString() + " has successfully been put in CameraMode");
+				targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
+				targetPlayer.sendMessage(ChatColor.GOLD + "Complimetns of " +ChatColor.GRAY + ChatColor.ITALIC + "Console");
+				if (getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
+					for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+						pl.hidePlayer(targetPlayer);
+					}
 				}
 			}
+		}else{
+			sender.sendMessage(ChatColor.RED + "Usage: /cameramode <player>");
 		}
 	}
 	return true;
