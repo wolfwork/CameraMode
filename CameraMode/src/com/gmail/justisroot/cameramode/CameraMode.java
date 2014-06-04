@@ -39,6 +39,7 @@ import org.bukkit.projectiles.ProjectileSource;
 public class CameraMode extends JavaPlugin implements Listener {
 	public ArrayList<String> flyplayers = new ArrayList<String>();
 	public HashMap<String, Integer> fireticks = new HashMap<String, Integer>();
+	public HashMap<String, Integer> breath = new HashMap<String, Integer>();
 	public ArrayList<String> pause = new ArrayList<String>();
 	public List<String> allowedcmds = this.getConfig().getStringList("CameraMode.PlayersInCM.AllowedCommands");
 	public HashMap<String, Location> locations = new HashMap<String, Location>();
@@ -350,6 +351,8 @@ public class CameraMode extends JavaPlugin implements Listener {
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						int Fireup = fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setFireTicks(Fireup);
+						int air = breath.get(((Player) sender).getUniqueId().toString()).intValue();
+						((Player) sender).setRemainingAir(air);
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
 						}
@@ -362,6 +365,8 @@ public class CameraMode extends JavaPlugin implements Listener {
 						}, 5L);
 						int Fireup = fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setFireTicks(Fireup);
+						int air = breath.get(((Player) sender).getUniqueId().toString()).intValue();
+						((Player) sender).setRemainingAir(air);
 						Location loc = locations.get(p.getUniqueId().toString());
 						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
@@ -374,6 +379,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 						((Player) sender).setAllowFlight(true);
 						fireticks.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getFireTicks());
 						((Player) sender).setFireTicks(0);
+						breath.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getRemainingAir());
 						sender.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
 						if (getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
 							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
@@ -407,6 +413,8 @@ public class CameraMode extends JavaPlugin implements Listener {
 						sender.sendMessage(ChatColor.GOLD + targetPlayer.toString() + " has successfully been ejected from CameraMode");
 						int Fireup = fireticks.get(superTarget).intValue();
 						targetPlayer.setFireTicks(Fireup);
+						int air = breath.get(superTarget).intValue();
+						(targetPlayer).setRemainingAir(air);
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(targetPlayer);
 						}
@@ -419,6 +427,8 @@ public class CameraMode extends JavaPlugin implements Listener {
 						}, 5L);
 						int Fireup = fireticks.get(superTarget).intValue();
 						(targetPlayer).setFireTicks(Fireup);
+						int air = breath.get(superTarget).intValue();
+						(targetPlayer).setRemainingAir(air);
 						Location loc = locations.get(superTarget);
 						targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
@@ -433,6 +443,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 					targetPlayer.setAllowFlight(true);
 					fireticks.put(superTarget, targetPlayer.getFireTicks());
 					targetPlayer.setFireTicks(0);
+					breath.put(superTarget, targetPlayer.getRemainingAir());
 					targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
 					targetPlayer.sendMessage(ChatColor.GOLD + "Complimetns of " + sender.toString());
 					sender.sendMessage(ChatColor.GOLD + targetPlayer.toString() + " has successfully been put in CameraMode");
@@ -454,6 +465,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 				targetPlayer.setAllowFlight(true);
 				fireticks.put(superTarget, targetPlayer.getFireTicks());
 				targetPlayer.setFireTicks(0);
+				breath.put(superTarget, targetPlayer.getRemainingAir());
 				sender.sendMessage(ChatColor.GOLD + targetPlayer.toString() + " has successfully been put in CameraMode");
 				targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
 				targetPlayer.sendMessage(ChatColor.GOLD + "Complimetns of " +ChatColor.GRAY + ChatColor.ITALIC + "Console");
