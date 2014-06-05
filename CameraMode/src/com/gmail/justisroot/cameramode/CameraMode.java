@@ -114,7 +114,8 @@ public class CameraMode extends JavaPlugin implements Listener {
 		}
 	}
 	@EventHandler
-	public void onPlayerLeave(PlayerQuitEvent e) {
+	public void onPlayerLeave(PlayerQuitEvent w) {
+		
 	}
 	@EventHandler
 	public void onPlayerToggleFlight(PlayerToggleFlightEvent e) {
