@@ -36,6 +36,9 @@ permissions:
     cameramode.camera:
         description: shows available commands
         default: true
-    cameramode.other
+    cameramode.other:
         description: Give and take CameraMode to/from other players
+        default: op
+    cameramode.config:
+        description: Allow for configuration of the config file.
         default: op

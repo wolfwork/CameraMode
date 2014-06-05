@@ -285,10 +285,12 @@ public class CameraMode extends JavaPlugin implements Listener {
 	public boolean onCommand(CommandSender sender, Command cmd, String StringLabel, String[] args) {
 	if (cmd.getName().equalsIgnoreCase("camera")) {
 		if (args.length == 0) {
-			if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) && (sender.hasPermission("cameramode.camera"))) {
+			if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) || (sender.hasPermission("cameramode.camera")) || (sender.hasPermission("cameramode.config"))) {
 				sender.sendMessage(ChatColor.AQUA + "__CameraMode Commands__");
 				sender.sendMessage(ChatColor.DARK_AQUA + "/Camera" + ChatColor.GRAY + "  - Displays This Help List");
-			} 
+			}else{
+				sender.sendMessage(ChatColor.RED + "You do not have permission.");
+			}
 			if (sender.hasPermission("cameramode.cm")){
 				sender.sendMessage(ChatColor.DARK_AQUA + "/CameraMode" + ChatColor.GRAY + "  - Enables CameraMode");
 			}
@@ -321,19 +323,23 @@ public class CameraMode extends JavaPlugin implements Listener {
 					}
 				}
 			}else if (args[0].equalsIgnoreCase("config")) {
-			    StringBuilder cl = new StringBuilder();
-			    for(String item : allowedcmds) {
-			            cl.append(item).append("\n");
-			    }
-				sender.sendMessage(ChatColor.AQUA + "__CameraMode Configuration Options__");
-				sender.sendMessage(ChatColor.DARK_GRAY + "[1] " + ChatColor.GRAY + "Enabled: " + ChatColor.RED + getConfig().getString("CameraMode.Enabled"));
-				sender.sendMessage(ChatColor.DARK_GRAY + "[2] " + ChatColor.DARK_AQUA + "CameraModed Players are Invincible: " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.AreInvincible"));
-				sender.sendMessage(ChatColor.DARK_GRAY + "[3] " + ChatColor.DARK_AQUA + "CameraModed Players are Vanished: " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.AreVanished"));
-				sender.sendMessage(ChatColor.DARK_GRAY + "[4] " + ChatColor.DARK_AQUA + "CameraModed Players can Change Worlds" + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds"));
-				sender.sendMessage(ChatColor.DARK_GRAY + "[5] " + ChatColor.DARK_AQUA + "CameraModed Players can Use Commands" + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.CanUseCommands"));
-				if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
-					sender.sendMessage(ChatColor.GRAY + "Allowed Commands: " + ChatColor.AQUA + (cl.toString()));
-					sender.sendMessage(ChatColor.DARK_GRAY + "Add A Command With" + ChatColor.GRAY + " /camera config addcmd </newcommand>");
+				if (sender.hasPermission("cameramode.config") || !(sender instanceof Player)) {
+				    StringBuilder cl = new StringBuilder();
+				    for(String item : allowedcmds) {
+				            cl.append(item).append("\n");
+				    }
+					sender.sendMessage(ChatColor.AQUA + "__CameraMode Configuration Options__");
+					sender.sendMessage(ChatColor.GRAY + "[1] " + ChatColor.DARK_GRAY + "Enabled: " + ChatColor.RED + getConfig().getString("CameraMode.Enabled"));
+					sender.sendMessage(ChatColor.GRAY + "[2] " + ChatColor.DARK_AQUA + "CameraModed Players are Invincible: " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.AreInvincible"));
+					sender.sendMessage(ChatColor.GRAY + "[3] " + ChatColor.DARK_AQUA + "CameraModed Players are Vanished: " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.AreVanished"));
+					sender.sendMessage(ChatColor.GRAY + "[4] " + ChatColor.DARK_AQUA + "CameraModed Players can Change Worlds " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds"));
+					sender.sendMessage(ChatColor.GRAY + "[5] " + ChatColor.DARK_AQUA + "CameraModed Players can Use Commands " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.CanUseCommands"));
+					if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
+						sender.sendMessage(ChatColor.GRAY + "Allowed Commands: " + ChatColor.AQUA + (cl.toString()));
+						sender.sendMessage(ChatColor.DARK_GRAY + "Add A Command With" + ChatColor.GRAY + " /camera config addcmd </newcommand>");
+					}
+				}else{
+					sender.sendMessage(ChatColor.RED + "You do not have permission.");
 				}
 			}else{
 				if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) && (sender.hasPermission("cameramode.camera"))) {
@@ -348,124 +354,144 @@ public class CameraMode extends JavaPlugin implements Listener {
 				}
 			}
 		}else if (args.length == 2){
-			if (args[0].equalsIgnoreCase("config")) {
-				sender.sendMessage(ChatColor.AQUA + "To configure an option - " + ChatColor.DARK_AQUA + "/camera config (option#) (true/false)");
-				if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
-					sender.sendMessage(ChatColor.GRAY + "To add a command to the 'AvailableCommands' list: " + ChatColor.AQUA + "/camera config addcmd </newcommand>");
-				}
-				sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
-			}
-		}else if (args.length >= 3){
-			if (args[0].equalsIgnoreCase("config")) {
-				if (args[1].equalsIgnoreCase("1")) {
-					if (args[2].equalsIgnoreCase("true")){
-						if (getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("true")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already enabled!");
-						}else{
-							getConfig().set("CameraMode.Enabled", true);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else if (args[2].equalsIgnoreCase("false")){
-						if (getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("false")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already disabled!");
-						}else{
-							getConfig().set("CameraMode.Enabled", false);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else{
-						sender.sendMessage(ChatColor.AQUA + "To configure an option - " + ChatColor.DARK_AQUA + "/camera config (option#) (true/false)");
-						sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
-					}
-					
-				}else if (args[1].equalsIgnoreCase("2")){
-					if (args[2].equalsIgnoreCase("true")){
-						if (getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("true")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already enabled!");
-						}else{
-							getConfig().set("CameraMode.PlayersInCM.AreInvincible", true);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else if (args[2].equalsIgnoreCase("false")){
-						if (getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("false")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already disabled!");
-						}else{
-							getConfig().set("CameraMode.PlayersInCM.AreInvincible", false);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else{
-						sender.sendMessage(ChatColor.AQUA + "To configure an option - " + ChatColor.DARK_AQUA + "/camera config (option#) (true/false)");
-						sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
-					}
-				}else if (args[1].equalsIgnoreCase("3")){
-					if (args[2].equalsIgnoreCase("true")){
-						if (getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("true")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already enabled!");
-						}else{
-							getConfig().set("CameraMode.PlayersInCM.AreVanished", true);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else if (args[2].equalsIgnoreCase("false")){
-						if (getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("false")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already disabled!");
-						}else{
-							getConfig().set("CameraMode.PlayersInCM.AreVanished", false);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else{
-						sender.sendMessage(ChatColor.AQUA + "To configure an option - " + ChatColor.DARK_AQUA + "/camera config (option#) (true/false)");
-						sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
-					}
-				}else if (args[1].equalsIgnoreCase("4")){
-					if (args[2].equalsIgnoreCase("true")){
-						if (getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds").equalsIgnoreCase("true")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already enabled!");
-						}else{
-							getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", true);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else if (args[2].equalsIgnoreCase("false")){
-						if (getConfig().getString("CameraMode.PlayersInCM.CanChangeWolrds").equalsIgnoreCase("false")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already disabled!");
-						}else{
-							getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", false);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else{
-						sender.sendMessage(ChatColor.AQUA + "To configure an option - " + ChatColor.DARK_AQUA + "/camera config (option#) (true/false)");
-						sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
-					}
-				}else if (args[1].equalsIgnoreCase("5")){
-					if (args[2].equalsIgnoreCase("true")){
-						if (getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("true")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already enabled!");
-						}else{
-							getConfig().set("CameraMode.PlayersInCM.CanUseCommands", true);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else if (args[2].equalsIgnoreCase("false")){
-						if (getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("false")){
-						sender.sendMessage(ChatColor.DARK_GRAY + "Silly you... xP I'm already disabled!");
-						}else{
-							getConfig().set("CameraMode.PlayersInCM.CanUseCommands", false);
-							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-						}
-					}else{
-						sender.sendMessage(ChatColor.AQUA + "To configure an option - " + ChatColor.DARK_AQUA + "/camera config (option#) (true/false)");
-						sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
-					}
-				}else if (args[1].equalsIgnoreCase("addcmd")){
-                    if (commandIsWhitelisted(args[2]) == false) {
-                    	sender.sendMessage(ChatColor.GRAY + "That command is already listed");
-                    }else{
-                    	getConfig().set("CameraMode.PlayersInCM.AllowedCommands", allowedcmds + args[2]);
-						sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.DARK_GREEN + "/camera reload");
-                    }
-				}else{
-					sender.sendMessage(ChatColor.AQUA + "To configure an option - " + ChatColor.DARK_AQUA + "/camera config (option#) (true/false)");
-					if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
-						sender.sendMessage(ChatColor.GRAY + "To add a command to the 'AvailableCommands' list: " + ChatColor.AQUA + "/camera config addcmd <command>");
-					}
+			if (args[0].equalsIgnoreCase("config")) {   
+				if (sender.hasPermission("cameramode.config") || !(sender instanceof Player)) { 
+					sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
 					sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
+					if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
+						sender.sendMessage(ChatColor.GRAY + "To add a command to the 'AvailableCommands' list: " + ChatColor.GRAY + "/camera config addcmd </newcommand>");
+					}
+				}else{
+					sender.sendMessage(ChatColor.RED + "You do not have permission.");
+				}
+			}
+		}else if (args.length == 3){
+			if (args[0].equalsIgnoreCase("config")) {
+				if (sender.hasPermission("cameramode.config") || !(sender instanceof Player)) {
+					if (args[1].equalsIgnoreCase("1")) {
+						if (args[2].equalsIgnoreCase("true")){
+							if (getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("true")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
+							}else{
+								this.getConfig().set("CameraMode.Enabled", true);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else if (args[2].equalsIgnoreCase("false")){
+							if (getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("false")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
+							}else{
+								this.getConfig().set("CameraMode.Enabled", false);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else{
+							sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
+						}
+						
+					}else if (args[1].equalsIgnoreCase("2")){
+						if (args[2].equalsIgnoreCase("true")){
+							if (getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("true")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
+							}else{
+								getConfig().set("CameraMode.PlayersInCM.AreInvincible", true);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else if (args[2].equalsIgnoreCase("false")){
+							if (getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("false")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
+							}else{
+								getConfig().set("CameraMode.PlayersInCM.AreInvincible", false);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else{
+							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
+						}
+					}else if (args[1].equalsIgnoreCase("3")){
+						if (args[2].equalsIgnoreCase("true")){
+							if (getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("true")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
+							}else{
+								getConfig().set("CameraMode.PlayersInCM.AreVanished", true);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else if (args[2].equalsIgnoreCase("false")){
+							if (getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("false")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
+							}else{
+								getConfig().set("CameraMode.PlayersInCM.AreVanished", false);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else{
+							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
+						}
+					}else if (args[1].equalsIgnoreCase("4")){
+						if (args[2].equalsIgnoreCase("true")){
+							if (getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds").equalsIgnoreCase("true")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
+							}else{
+								getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", true);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else if (args[2].equalsIgnoreCase("false")){
+							if (getConfig().getString("CameraMode.PlayersInCM.CanChangeWolrds").equalsIgnoreCase("false")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
+							}else{
+								getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", false);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else{
+							sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
+						}
+					}else if (args[1].equalsIgnoreCase("5")){
+						if (args[2].equalsIgnoreCase("true")){
+							if (getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("true")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
+							}else{
+								getConfig().set("CameraMode.PlayersInCM.CanUseCommands", true);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else if (args[2].equalsIgnoreCase("false")){
+							if (getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("false")){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
+							}else{
+								getConfig().set("CameraMode.PlayersInCM.CanUseCommands", false);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+								saveConfig();
+							}
+						}else{
+							sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
+						}
+					}else if (args[1].equalsIgnoreCase("addcmd")){
+	                    if (commandIsWhitelisted(args[2]) == true) {
+	                    	sender.sendMessage(ChatColor.GRAY + "That command is already listed");
+	                    }else{
+	                    	allowedcmds.add(args[2].replaceFirst("/", ""));
+	                    	getConfig().set("CameraMode.PlayersInCM.AllowedCommands", allowedcmds);
+							sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
+							saveConfig();
+	                    }
+					}else{
+						sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+						if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
+							sender.sendMessage(ChatColor.GRAY + "To add a command to the 'AvailableCommands' list: " + ChatColor.GRAY + "/camera config addcmd <command>");
+						}
+						sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
+					}
+				}else{
+					sender.sendMessage(ChatColor.RED + "You do not have permission.");
 				}
 			}
 		}else{//This here isn't even necessary, but whatever. xP
