@@ -1,4 +1,4 @@
-# CameraMode Version 1.0.3
+# CameraMode Version 1.1.5
 # Developed And Maintained By xYourFreindx
 CameraMode:
     Enabled: true
@@ -12,7 +12,7 @@ CameraMode:
         - camera
         - cameramode
         - reload
-        - save-all
+        - cm
         
         
         
