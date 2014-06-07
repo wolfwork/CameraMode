@@ -40,6 +40,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 public class CameraMode extends JavaPlugin implements Listener {
+	
 	public ArrayList<String> flyplayers = new ArrayList<String>();
 	public HashMap<String, Integer> fireticks = new HashMap<String, Integer>();
 	public HashMap<String, Integer> breath = new HashMap<String, Integer>();
@@ -53,6 +54,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
+		Updater updater = new Updater(this, id, this.getFile(), Updater.UpdateType.DEFAULT, false);
 		getConfig().options().header("http://dev.bukkit.org/bukkit-plugins/cameramode/pages/config-yml-explained/");
 		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
