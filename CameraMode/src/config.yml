@@ -6,6 +6,7 @@ CameraMode:
     Updates:
         AutoUpdate: false
         NotifyOps: true
+    PvpTimer: 5
     PlayersInCM:
         AreInvincible: true
         AreVanished: false
