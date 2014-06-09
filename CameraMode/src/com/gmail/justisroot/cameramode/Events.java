@@ -38,10 +38,36 @@ public class Events implements Listener {
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player) {
-			Player player = (Player) e.getDamager();
+			final Player player = (Player) e.getDamager();
 			if(main.flyplayers.contains(player.getUniqueId().toString())){
 				e.setCancelled(true);
 						player.sendMessage(ChatColor.RED + reason);
+			}else{
+				if (main.getConfig().getLong("CameraMode.PvpTimer") != 0){
+				 main.pvpTimer.add(e.getDamager().getUniqueId().toString());
+				 CameraMode pInst = main;
+					pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+						public void run() {
+							main.pvpTimer.remove(player.getUniqueId().toString());
+						}
+					}, main.getConfig().getLong("CameraMode.PvpTimer"));
+				}
+			}
+		}
+		if (e.getEntity() instanceof Player){
+			final Player entiti = (Player) e.getEntity();
+			if(main.flyplayers.contains(entiti.getUniqueId().toString())){
+				e.setCancelled(true);
+			}else{
+				if (main.getConfig().getLong("CameraMode.PvpTimer") != 0){
+				 main.pvpTimer.add(e.getDamager().getUniqueId().toString());
+				 CameraMode pInst = main;
+					pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+						public void run() {
+							main.pvpTimer.remove(entiti.getUniqueId().toString());
+						}
+					}, main.getConfig().getLong("CameraMode.PvpTimer"));
+				}
 			}
 		}
 	}

@@ -16,7 +16,6 @@ import com.gmail.justisroot.cameramode.Updater.UpdateType;
 
 public class CameraMode extends JavaPlugin {
 	
-	
 	//##########################//
 	//######- Data Store -######//
 	//##########################//
@@ -25,14 +24,15 @@ public class CameraMode extends JavaPlugin {
 	public HashMap<String, Integer> fireticks = new HashMap<String, Integer>();
 	public HashMap<String, Integer> breath = new HashMap<String, Integer>();
 	public ArrayList<String> pause = new ArrayList<String>();
-	public List<String> allowedcmds = this.getConfig().getStringList("CameraMode.PlayersInCM.AllowedCommands");
+	public List<String> allowedcmds = getConfig().getStringList("CameraMode.PlayersInCM.AllowedCommands");
 	public HashMap<String, Location> locations = new HashMap<String, Location>();
 	public ArrayList<String> tre = new ArrayList<String>();
 	public HashMap<String, List<PotionEffect>> effects = new HashMap<String, List<PotionEffect>>();
 	public HashMap<String, Vector> vel = new HashMap<String, Vector>();
 	public HashMap<String, Entity> mobs = new HashMap<String, Entity>();
+	public ArrayList<String> pvpTimer = new ArrayList<String>();
 	
-	//#### - Objects - ####//
+	//###### - Objects - ######//
 	
 	Player playerr;
 	String reason = "You are in CameraMode!";
