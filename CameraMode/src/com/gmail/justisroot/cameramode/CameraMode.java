@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -38,6 +39,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+
+import com.gmail.justisroot.cameramode.Updater.UpdateResult;
 
 public class CameraMode extends JavaPlugin implements Listener {
 	
@@ -52,10 +55,11 @@ public class CameraMode extends JavaPlugin implements Listener {
 	public HashMap<String, Vector> vel = new HashMap<String, Vector>();
 	String reason = "You are in CameraMode!";
 	
+	Updater updater;
+	
+	@SuppressWarnings("unused")
 	@Override
 	public void onEnable() {
-		Updater updater = new Updater(this, id, this.getFile(), Updater.UpdateType.DEFAULT, false);
-		getConfig().options().header("http://dev.bukkit.org/bukkit-plugins/cameramode/pages/config-yml-explained/");
 		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
@@ -66,11 +70,15 @@ public class CameraMode extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(this, this);
 		PluginDescriptionFile pdfFile = this.getDescription();
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been enabled"); 
+		if (getConfig().getBoolean("CameraMode.Updates.AutoUpdate") == true){
+			Updater updater = new Updater(this, 80542, getFile(), Updater.UpdateType.DEFAULT, true);
+		}else{
+			Updater updater = new Updater(this, 80542, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+		}
 	}
 	@Override
 	public void onDisable(){
 		reloadConfig();
-		saveConfig();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been disabled");
 	}
@@ -86,6 +94,17 @@ public class CameraMode extends JavaPlugin implements Listener {
 			if(flyplayers.contains(player.getUniqueId().toString())){
 				e.setCancelled(true);
 						player.sendMessage(ChatColor.RED + reason);
+			}
+		}
+	}
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e){
+		if (updater.getResult().equals(UpdateResult.UPDATE_AVAILABLE)) {
+			if (updater.getLatestType().toString().equalsIgnoreCase("release") && (getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true)) {
+				if (e.getPlayer().hasPermission("cameramode.update")){
+					e.getPlayer().sendMessage(ChatColor.DARK_AQUA + "CameraMode: " + ChatColor.AQUA + "New Update Available!");
+					e.getPlayer().sendMessage(ChatColor.GRAY + updater.getLatestFileLink().toString());
+				}
 			}
 		}
 	}
@@ -120,7 +139,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 		}
 	}
 	@EventHandler
-	public void onPlayerLeave(PlayerQuitEvent w) {
+	public void onPlayerLeave(PlayerQuitEvent e) {
 		
 	}
 	@EventHandler
@@ -386,6 +405,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
+								reloadConfig();
 								this.getConfig().set("CameraMode.Enabled", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
 								saveConfig();
@@ -394,6 +414,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
+								reloadConfig();
 								this.getConfig().set("CameraMode.Enabled", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
 								saveConfig();
@@ -408,6 +429,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
+								reloadConfig();
 								getConfig().set("CameraMode.PlayersInCM.AreInvincible", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 								saveConfig();
@@ -416,6 +438,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
+								reloadConfig();
 								getConfig().set("CameraMode.PlayersInCM.AreInvincible", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 								saveConfig();
@@ -429,6 +452,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
+								reloadConfig();
 								getConfig().set("CameraMode.PlayersInCM.AreVanished", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 								saveConfig();
@@ -437,6 +461,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
+								reloadConfig();
 								getConfig().set("CameraMode.PlayersInCM.AreVanished", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 								saveConfig();
@@ -450,6 +475,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
+								reloadConfig();
 								getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 								saveConfig();
@@ -458,6 +484,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.PlayersInCM.CanChangeWolrds").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
+								reloadConfig();
 								getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 								saveConfig();
@@ -471,6 +498,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
+								reloadConfig();
 								getConfig().set("CameraMode.PlayersInCM.CanUseCommands", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 								saveConfig();
@@ -479,6 +507,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 							if (getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
+								reloadConfig();
 								getConfig().set("CameraMode.PlayersInCM.CanUseCommands", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 								saveConfig();
@@ -492,6 +521,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 	                    	sender.sendMessage(ChatColor.GRAY + "That command is already listed");
 	                    }else{
 	                    	allowedcmds.add(args[2].replaceFirst("/", ""));
+	                    	reloadConfig();
 	                    	getConfig().set("CameraMode.PlayersInCM.AllowedCommands", allowedcmds);
 	    				    StringBuilder cl = new StringBuilder();
 	    				    for(String item : allowedcmds) {
@@ -506,6 +536,7 @@ public class CameraMode extends JavaPlugin implements Listener {
 	                    	sender.sendMessage(ChatColor.GRAY + "That command not yet whitelisted.");
 	                    }else{
 	                    	allowedcmds.remove(args[2].replace("/", ""));
+	                    	reloadConfig();
 	                    	getConfig().set("CameraMode.PlayersInCM.AllowedCommands", allowedcmds);
 	                    	saveConfig();
 	    				    StringBuilder cl = new StringBuilder();

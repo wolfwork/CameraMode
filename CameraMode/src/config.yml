@@ -1,17 +1,19 @@
 # CameraMode Version 1.1.5
 # Developed And Maintained By xYourFreindx
+# http://dev.bukkit.org/bukkit-plugins/cameramode/pages/config-yml-explained/
 CameraMode:
     Enabled: true
+    Updates:
+        AutoUpdate: false
+        NotifyOps: true
     PlayersInCM:
         AreInvincible: true
         AreVanished: false
         CanChangeWorlds: true
         CanUseCommands: true
-        # Only Necessary if "CanUseCommands" is set to false.
         AllowedCommands:
         - camera
         - cameramode
-        - reload
         - cm
         
         

@@ -33,7 +33,7 @@ import org.json.simple.JSONValue;
  * @version 2.1
  */
 
-public class Updater {
+public class Updater{
 
     private Plugin plugin;
     private UpdateType type;
@@ -45,7 +45,7 @@ public class Updater {
     private boolean announce; // Whether to announce file downloads
 
     private URL url; // Connecting to RSS
-    private File file; // The plugin's file
+    public File file; // The plugin's file
     private Thread thread; // Updater thread
 
     private int id = -1; // Project's Curse ID
@@ -62,8 +62,9 @@ public class Updater {
     private static final String[] NO_UPDATE_TAG = { "-DEV", "-PRE", "-SNAPSHOT" }; // If the version number contains one of these, don't update.
     private static final int BYTE_SIZE = 1024; // Used for downloading files
     private final YamlConfiguration config = new YamlConfiguration(); // Config file
-    private String updateFolder;// The folder that downloads will be placed in
+    public String updateFolder;// The folder that downloads will be placed in
     private Updater.UpdateResult result = Updater.UpdateResult.SUCCESS; // Used for determining the outcome of the update process
+
 
     /**
      * Gives the developer the result of the update process. Can be obtained by called {@link #getResult()}
@@ -295,7 +296,7 @@ public class Updater {
      * @param file the name of the file to save it as.
      * @param link the url of the file.
      */
-    private void saveFile(File folder, String file, String link) {
+    public void saveFile(File folder, String file, String link) {
         if (!folder.exists()) {
             folder.mkdir();
         }

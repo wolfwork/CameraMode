@@ -24,6 +24,7 @@ permissions:
             cameramode.cm: true
             cameramode.other: true
             cameramode.config: true
+            cameramode.update: true
         default: op
     cameramode.cm:
         description: Gives access to cameramode
@@ -42,4 +43,7 @@ permissions:
         default: op
     cameramode.config:
         description: Allow for configuration of the config file.
+        default: op
+    cameramode.update:
+        description: Grants notification to updates.
         default: op
