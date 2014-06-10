@@ -278,7 +278,7 @@ public class Commands{
 				}
 			}
 	//########################//
-	//#####- CameraMode -#####//
+	//#####- CameraMode -#####//       //Add PvpTimer to this v
 		}else{
 			if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) || (sender.hasPermission("cameramode.camera")) || sender.hasPermission("cameramode.config")) {
 				sender.sendMessage(ChatColor.RED + "Too many arguments.");
@@ -333,21 +333,25 @@ public class Commands{
 							pl.showPlayer(p);
 						}
 					}else{
-						main.flyplayers.add(target);
-						main.vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
-						main.locations.put(p.getUniqueId().toString(), p.getLocation());
-						((Player) sender).setAllowFlight(true);
-						main.fireticks.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getFireTicks());
-						((Player) sender).setFireTicks(0);
-						main.breath.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getRemainingAir());
-						main.effects.put(((Player) sender).getUniqueId().toString(), (List<PotionEffect>) ((Player) sender).getActivePotionEffects());
-						for (PotionEffect effect : ((Player) sender).getActivePotionEffects())
-					        ((Player) sender).removePotionEffect(effect.getType());
-						sender.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
-						if (main.getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
-							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-								pl.hidePlayer(p);
+						if (!(main.pvpTimer.contains(((Player) sender).getUniqueId().toString()))) {
+							main.flyplayers.add(target);
+							main.vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
+							main.locations.put(p.getUniqueId().toString(), p.getLocation());
+							((Player) sender).setAllowFlight(true);
+							main.fireticks.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getFireTicks());
+							((Player) sender).setFireTicks(0);
+							main.breath.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getRemainingAir());
+							main.effects.put(((Player) sender).getUniqueId().toString(), (List<PotionEffect>) ((Player) sender).getActivePotionEffects());
+							for (PotionEffect effect : ((Player) sender).getActivePotionEffects())
+						        ((Player) sender).removePotionEffect(effect.getType());
+							sender.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
+							if (main.getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
+								for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+									pl.hidePlayer(p);
+								}
 							}
+						}else{
+							sender.sendMessage(ChatColor.RED + "You cannot CameraMode while in battle!");
 						}
 					}
 				}else{
@@ -416,27 +420,31 @@ public class Commands{
 								pl.showPlayer(targetPlayer);
 							}
 						}else{
-						main.flyplayers.add(superTarget);
-						main.locations.put(superTarget, targetPlayer.getLocation());
-						targetPlayer.setAllowFlight(true);
-						main.fireticks.put(superTarget, targetPlayer.getFireTicks());
-						targetPlayer.setFireTicks(0);
-						main.vel.put(superTarget, targetPlayer.getVelocity());
-						main.breath.put(superTarget, targetPlayer.getRemainingAir());
-						main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
-						for (PotionEffect effect : targetPlayer.getActivePotionEffects())
-					        targetPlayer.removePotionEffect(effect.getType());
-						targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
-							if (superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
-								sender.sendMessage(ChatColor.GRAY + "Try just /cm next time ;)");
-							}else{
-								targetPlayer.sendMessage(ChatColor.GOLD + "Compliments of " + sender.getName().toString());
-								sender.sendMessage(ChatColor.GOLD + targetPlayer.getName().toString() + " has successfully been put in CameraMode");
-							}
-							if (main.getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
-								for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-									pl.hidePlayer(targetPlayer);
+							if (!(main.pvpTimer.contains(superTarget))){
+							main.flyplayers.add(superTarget);
+							main.locations.put(superTarget, targetPlayer.getLocation());
+							targetPlayer.setAllowFlight(true);
+							main.fireticks.put(superTarget, targetPlayer.getFireTicks());
+							targetPlayer.setFireTicks(0);
+							main.vel.put(superTarget, targetPlayer.getVelocity());
+							main.breath.put(superTarget, targetPlayer.getRemainingAir());
+							main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
+							for (PotionEffect effect : targetPlayer.getActivePotionEffects())
+						        targetPlayer.removePotionEffect(effect.getType());
+							targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
+								if (superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
+									sender.sendMessage(ChatColor.GRAY + "Try just /cm next time ;)");
+								}else{
+									targetPlayer.sendMessage(ChatColor.GOLD + "Compliments of " + sender.getName().toString());
+									sender.sendMessage(ChatColor.GOLD + targetPlayer.getName().toString() + " has successfully been put in CameraMode");
 								}
+								if (main.getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
+									for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+										pl.hidePlayer(targetPlayer);
+									}
+								}
+							}else{
+								sender.sendMessage(ChatColor.RED + "This player is currently currently battling.");
 							}
 						}
 					}else{
@@ -452,23 +460,27 @@ public class Commands{
 					final Player targetPlayer = Bukkit.getServer().getPlayerExact(args[0]);
 					final String superTarget = targetPlayer.getUniqueId().toString();
 					if (!(main.flyplayers.contains(superTarget))){
-						main.flyplayers.add(superTarget);
-						main.locations.put(superTarget, targetPlayer.getLocation());
-						targetPlayer.setAllowFlight(true);
-						main.fireticks.put(superTarget, targetPlayer.getFireTicks());
-						targetPlayer.setFireTicks(0);
-						main.vel.put(superTarget, targetPlayer.getVelocity());
-						main.breath.put(superTarget, targetPlayer.getRemainingAir());
-						main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
-						for (PotionEffect effect : targetPlayer.getActivePotionEffects())
-					        targetPlayer.removePotionEffect(effect.getType());
-						sender.sendMessage(ChatColor.GOLD + args[0] + " has successfully been put in CameraMode");
-						targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
-						targetPlayer.sendMessage(ChatColor.GOLD + "Compliments of " + ChatColor.GRAY + ChatColor.ITALIC + "CONSOLE.");
-						if (main.getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
-							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-								pl.hidePlayer(targetPlayer);
+						if (!(main.pvpTimer.contains(superTarget))){
+							main.flyplayers.add(superTarget);
+							main.locations.put(superTarget, targetPlayer.getLocation());
+							targetPlayer.setAllowFlight(true);
+							main.fireticks.put(superTarget, targetPlayer.getFireTicks());
+							targetPlayer.setFireTicks(0);
+							main.vel.put(superTarget, targetPlayer.getVelocity());
+							main.breath.put(superTarget, targetPlayer.getRemainingAir());
+							main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
+							for (PotionEffect effect : targetPlayer.getActivePotionEffects())
+						        targetPlayer.removePotionEffect(effect.getType());
+							sender.sendMessage(ChatColor.GOLD + args[0] + " has successfully been put in CameraMode");
+							targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
+							targetPlayer.sendMessage(ChatColor.GOLD + "Compliments of " + ChatColor.GRAY + ChatColor.ITALIC + "CONSOLE.");
+							if (main.getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
+								for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+									pl.hidePlayer(targetPlayer);
+								}
 							}
+						}else{
+							sender.sendMessage(ChatColor.RED + "This player is currently battling.");
 						}
 					}else if (main.flyplayers.contains(superTarget) && (targetPlayer).getGameMode() == (GameMode.SURVIVAL)) {
 						targetPlayer.setAllowFlight(false);

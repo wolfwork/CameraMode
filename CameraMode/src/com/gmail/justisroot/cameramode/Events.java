@@ -3,7 +3,27 @@ package com.gmail.justisroot.cameramode;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Blaze;
+import org.bukkit.entity.CaveSpider;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Ghast;
+import org.bukkit.entity.Giant;
+import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.MagmaCube;
+import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Silverfish;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Slime;
+import org.bukkit.entity.Spider;
+import org.bukkit.entity.Witch;
+import org.bukkit.entity.Wither;
+import org.bukkit.entity.WitherSkull;
+import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -44,13 +64,15 @@ public class Events implements Listener {
 						player.sendMessage(ChatColor.RED + reason);
 			}else{
 				if (main.getConfig().getLong("CameraMode.PvpTimer") != 0){
-				 main.pvpTimer.add(e.getDamager().getUniqueId().toString());
-				 CameraMode pInst = main;
-					pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-						public void run() {
-							main.pvpTimer.remove(player.getUniqueId().toString());
-						}
-					}, main.getConfig().getLong("CameraMode.PvpTimer"));
+					if (e.getEntity() instanceof Zombie || e.getEntity() instanceof Slime || e.getEntity() instanceof Player || e.getEntity() instanceof Skeleton || e.getEntity() instanceof Creeper || e.getEntity() instanceof Spider || e.getEntity() instanceof Witch || e.getEntity() instanceof Wolf || e.getEntity() instanceof Blaze || e.getEntity() instanceof Ghast || e.getEntity() instanceof MagmaCube || e.getEntity() instanceof Arrow || e.getEntity() instanceof CaveSpider || e.getEntity() instanceof EnderDragon | e.getEntity() instanceof PigZombie || e.getEntity() instanceof Silverfish || e.getEntity() instanceof Fireball || e.getEntity() instanceof WitherSkull || e.getEntity() instanceof Wither || e.getEntity() instanceof IronGolem || e.getEntity() instanceof Giant){
+					 main.pvpTimer.add(e.getDamager().getUniqueId().toString());
+					 CameraMode pInst = main;
+						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+							public void run() {
+								main.pvpTimer.remove(player.getUniqueId().toString());
+							}
+						}, main.getConfig().getLong("CameraMode.PvpTimer"));
+					}
 				}
 			}
 		}
@@ -60,13 +82,15 @@ public class Events implements Listener {
 				e.setCancelled(true);
 			}else{
 				if (main.getConfig().getLong("CameraMode.PvpTimer") != 0){
-				 main.pvpTimer.add(e.getDamager().getUniqueId().toString());
-				 CameraMode pInst = main;
-					pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-						public void run() {
-							main.pvpTimer.remove(entiti.getUniqueId().toString());
-						}
-					}, main.getConfig().getLong("CameraMode.PvpTimer"));
+					if (e.getEntity() instanceof Zombie || e.getEntity() instanceof Slime || e.getEntity() instanceof Player || e.getEntity() instanceof Skeleton || e.getEntity() instanceof Creeper || e.getEntity() instanceof Spider || e.getEntity() instanceof Witch || e.getEntity() instanceof Wolf || e.getEntity() instanceof Blaze || e.getEntity() instanceof Ghast || e.getEntity() instanceof MagmaCube || e.getEntity() instanceof Arrow || e.getEntity() instanceof CaveSpider || e.getEntity() instanceof EnderDragon | e.getEntity() instanceof PigZombie || e.getEntity() instanceof Silverfish || e.getEntity() instanceof Fireball || e.getEntity() instanceof WitherSkull || e.getEntity() instanceof Wither || e.getEntity() instanceof IronGolem || e.getEntity() instanceof Giant){
+						main.pvpTimer.add(e.getDamager().getUniqueId().toString());
+						CameraMode pInst = main;
+						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+							public void run() {
+								main.pvpTimer.remove(entiti.getUniqueId().toString());
+							}
+						}, main.getConfig().getLong("CameraMode.PvpTimer"));
+					}
 				}
 			}
 		}
