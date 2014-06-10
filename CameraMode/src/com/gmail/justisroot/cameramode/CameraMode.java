@@ -46,7 +46,6 @@ public class CameraMode extends JavaPlugin {
 	//#########- Start - #########//
 	//############################//
 	
-	@SuppressWarnings("unused")
 	@Override
 	public void onEnable() {
 		getConfig().options().copyHeader(true);
@@ -59,6 +58,7 @@ public class CameraMode extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(event, this);
 		PluginDescriptionFile pdfFile = this.getDescription();
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been enabled"); 
+		@SuppressWarnings("unused")
 		Updater updater = new Updater(this, 80542, getFile(), biff, true);
 	}
 	@Override

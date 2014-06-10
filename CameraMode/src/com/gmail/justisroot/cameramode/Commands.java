@@ -11,7 +11,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-public class Commands extends CameraMode{
+public class Commands{
+	
+
+	CameraMode main;
 	
 	@SuppressWarnings({ "deprecation" })
 	public boolean onCommand(CommandSender sender, Command cmd, String StringLabel, String[] args) {
@@ -21,7 +24,7 @@ public class Commands extends CameraMode{
 		if (args.length == 0) { 
 			if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) || (sender.hasPermission("cameramode.camera")) || (sender.hasPermission("cameramode.config"))) {
 				sender.sendMessage(ChatColor.AQUA + "__CameraMode Commands__");
-				sender.sendMessage(ChatColor.DARK_AQUA + "/Camera" + ChatColor.GRAY + "  - Displays This Help List");
+				sender.sendMessage(ChatColor.DARK_AQUA + "/Camera" + ChatColor.GRAY + "  - Displays main Help List");
 			}else{
 				sender.sendMessage(ChatColor.RED + "You do not have permission.");
 			}
@@ -40,22 +43,22 @@ public class Commands extends CameraMode{
 			if (args[0].equalsIgnoreCase("reload")) {
 				if (sender instanceof Player) {
 					if (sender.hasPermission("cameramode.reload")) {
-						reloadConfig();
+						main.reloadConfig();
 						sender.sendMessage(ChatColor.GREEN + "Config Reloaded");
-						getLogger().info("Reloading Configuration...");
-						if (getConfig().getBoolean("CameraMode.Enabled") == false) {
-							getLogger().info("Plugin Disable Setting Detected...");
-							getServer().getPluginManager().disablePlugin(this);
+						main.getLogger().info("Reloading Configuration...");
+						if (main.getConfig().getBoolean("CameraMode.Enabled") == false) {
+							main.getLogger().info("Plugin Disable Setting Detected...");
+							main.getServer().getPluginManager().disablePlugin(main);
 						}
 					}else{
 						sender.sendMessage(ChatColor.RED + "You do not have permission!");
 					}
 				}else{
-					reloadConfig();
-					getLogger().info("Config reloaded");
-					if (getConfig().getBoolean("CameraMode.Enabled") == false) {
-						getLogger().info("Plugin Disable Setting Detected...");
-						getServer().getPluginManager().disablePlugin(this);
+					main.reloadConfig();
+					main.getLogger().info("Config reloaded");
+					if (main.getConfig().getBoolean("CameraMode.Enabled") == false) {
+						main.getLogger().info("Plugin Disable Setting Detected...");
+						main.getServer().getPluginManager().disablePlugin(main);
 					}
 				}
 			//#####################//
@@ -63,16 +66,16 @@ public class Commands extends CameraMode{
 			}else if (args[0].equalsIgnoreCase("config")) {
 				if (sender.hasPermission("cameramode.config") || !(sender instanceof Player)) {
 				    StringBuilder cl = new StringBuilder();
-				    for(String item : allowedcmds) {
+				    for(String item : main.allowedcmds) {
 				            cl.append(" /").append(item).append(",");
 				    }
 					sender.sendMessage(ChatColor.AQUA + "__CameraMode Configuration Options__");
-					sender.sendMessage(ChatColor.GRAY + "[1] " + ChatColor.DARK_GRAY + "Enabled: " + ChatColor.RED + getConfig().getString("CameraMode.Enabled"));
-					sender.sendMessage(ChatColor.GRAY + "[2] " + ChatColor.DARK_AQUA + "CameraModed Players are Invincible: " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.AreInvincible"));
-					sender.sendMessage(ChatColor.GRAY + "[3] " + ChatColor.DARK_AQUA + "CameraModed Players are Vanished: " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.AreVanished"));
-					sender.sendMessage(ChatColor.GRAY + "[4] " + ChatColor.DARK_AQUA + "CameraModed Players can Change Worlds " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds"));
-					sender.sendMessage(ChatColor.GRAY + "[5] " + ChatColor.DARK_AQUA + "CameraModed Players can Use Commands " + ChatColor.RED + getConfig().getString("CameraMode.PlayersInCM.CanUseCommands"));
-					if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
+					sender.sendMessage(ChatColor.GRAY + "[1] " + ChatColor.DARK_GRAY + "Enabled: " + ChatColor.RED + main.getConfig().getString("CameraMode.Enabled"));
+					sender.sendMessage(ChatColor.GRAY + "[2] " + ChatColor.DARK_AQUA + "CameraModed Players are Invincible: " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.AreInvincible"));
+					sender.sendMessage(ChatColor.GRAY + "[3] " + ChatColor.DARK_AQUA + "CameraModed Players are Vanished: " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.AreVanished"));
+					sender.sendMessage(ChatColor.GRAY + "[4] " + ChatColor.DARK_AQUA + "CameraModed Players can Change Worlds " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds"));
+					sender.sendMessage(ChatColor.GRAY + "[5] " + ChatColor.DARK_AQUA + "CameraModed Players can Use Commands " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.CanUseCommands"));
+					if (main.getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
 						sender.sendMessage(ChatColor.GRAY + "To toggle a cmd: " + ChatColor.GRAY + "/camera config (addcmd/delcmd) </command>");
 						sender.sendMessage(ChatColor.GRAY + "Allowed Commands:" + ChatColor.AQUA + (cl.toString()));
 					}
@@ -82,7 +85,7 @@ public class Commands extends CameraMode{
 			}else{
 				if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) && (sender.hasPermission("cameramode.camera"))) {
 					sender.sendMessage(ChatColor.AQUA + "__CameraMode Commands__");
-					sender.sendMessage(ChatColor.DARK_AQUA + "/Camera" + ChatColor.GRAY + "  - Displays This Help List");
+					sender.sendMessage(ChatColor.DARK_AQUA + "/Camera" + ChatColor.GRAY + "  - Displays main Help List");
 				} 
 				if (sender.hasPermission("cameramode.cm")){
 					sender.sendMessage(ChatColor.DARK_AQUA + "/CameraMode" + ChatColor.GRAY + "  - Enables CameraMode");
@@ -99,7 +102,7 @@ public class Commands extends CameraMode{
 				if (sender.hasPermission("cameramode.config") || !(sender instanceof Player)) { 
 					sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
 					sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
-					if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
+					if (main.getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
 						sender.sendMessage(ChatColor.GRAY + "To toggle a cmd: " + ChatColor.GRAY + "/camera config (addcmd/delcmd) </command>");
 					}
 				}else if (!sender.hasPermission("cameramode.config") && sender instanceof Player){
@@ -114,22 +117,22 @@ public class Commands extends CameraMode{
     /*Enable*/		
 					if (args[1].equalsIgnoreCase("1")) {
 						if (args[2].equalsIgnoreCase("true")){
-            				if (getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("true")){
+            				if (main.getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
-								reloadConfig();
-								this.getConfig().set("CameraMode.Enabled", true);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.Enabled", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else if (args[2].equalsIgnoreCase("false")){
-							if (getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("false")){
+							if (main.getConfig().getString("CameraMode.Enabled").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
-								reloadConfig();
-								this.getConfig().set("CameraMode.Enabled", false);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.Enabled", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made. Don't forget to " + ChatColor.GRAY + "/camera reload");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else{
 							sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
@@ -139,22 +142,22 @@ public class Commands extends CameraMode{
    /*Invincible*/	
 					}else if (args[1].equalsIgnoreCase("2")){
 						if (args[2].equalsIgnoreCase("true")){
-							if (getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("true")){
+							if (main.getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
-								reloadConfig();
-								getConfig().set("CameraMode.PlayersInCM.AreInvincible", true);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.PlayersInCM.AreInvincible", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else if (args[2].equalsIgnoreCase("false")){
-							if (getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("false")){
+							if (main.getConfig().getString("CameraMode.PlayersInCM.AreInvincible").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
-								reloadConfig();
-								getConfig().set("CameraMode.PlayersInCM.AreInvincible", false);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.PlayersInCM.AreInvincible", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else{
 							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
@@ -163,22 +166,22 @@ public class Commands extends CameraMode{
 	/*Vanished*/
 					}else if (args[1].equalsIgnoreCase("3")){
 						if (args[2].equalsIgnoreCase("true")){
-							if (getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("true")){
+							if (main.getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
-								reloadConfig();
-								getConfig().set("CameraMode.PlayersInCM.AreVanished", true);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.PlayersInCM.AreVanished", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else if (args[2].equalsIgnoreCase("false")){
-							if (getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("false")){
+							if (main.getConfig().getString("CameraMode.PlayersInCM.AreVanished").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
-								reloadConfig();
-								getConfig().set("CameraMode.PlayersInCM.AreVanished", false);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.PlayersInCM.AreVanished", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else{
 							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
@@ -187,22 +190,22 @@ public class Commands extends CameraMode{
   /*World_Change*/  
 					}else if (args[1].equalsIgnoreCase("4")){
 						if (args[2].equalsIgnoreCase("true")){
-							if (getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds").equalsIgnoreCase("true")){
+							if (main.getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
-								reloadConfig();
-								getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", true);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else if (args[2].equalsIgnoreCase("false")){
-							if (getConfig().getString("CameraMode.PlayersInCM.CanChangeWolrds").equalsIgnoreCase("false")){
+							if (main.getConfig().getString("CameraMode.PlayersInCM.CanChangeWolrds").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
-								reloadConfig();
-								getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", false);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else{
 							sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
@@ -211,22 +214,22 @@ public class Commands extends CameraMode{
    /*UseCommands*/
 					}else if (args[1].equalsIgnoreCase("5")){
 						if (args[2].equalsIgnoreCase("true")){
-							if (getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("true")){
+							if (main.getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("true")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already enabled!");
 							}else{
-								reloadConfig();
-								getConfig().set("CameraMode.PlayersInCM.CanUseCommands", true);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.PlayersInCM.CanUseCommands", true);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else if (args[2].equalsIgnoreCase("false")){
-							if (getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("false")){
+							if (main.getConfig().getString("CameraMode.PlayersInCM.CanUseCommands").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
-								reloadConfig();
-								getConfig().set("CameraMode.PlayersInCM.CanUseCommands", false);
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.PlayersInCM.CanUseCommands", false);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
-								saveConfig();
+								main.saveConfig();
 							}
 						}else{
 							sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
@@ -234,30 +237,30 @@ public class Commands extends CameraMode{
 						}
 	/*Commands*/
 					}else if (args[1].equalsIgnoreCase("addcmd")){
-	                    if (commandIsWhitelisted(args[2]) == true) {
+	                    if (main.commandIsWhitelisted(args[2]) == true) {
 	                    	sender.sendMessage(ChatColor.GRAY + "That command is already listed");
 	                    }else{
-	                    	allowedcmds.add(args[2].replaceFirst("/", ""));
-	                    	reloadConfig();
-	                    	getConfig().set("CameraMode.PlayersInCM.AllowedCommands", allowedcmds);
+	                    	main.allowedcmds.add(args[2].replaceFirst("/", ""));
+	                    	main.reloadConfig();
+	                    	main.getConfig().set("CameraMode.PlayersInCM.AllowedCommands", main.allowedcmds);
 	    				    StringBuilder cl = new StringBuilder();
-	    				    for(String item : allowedcmds) {
+	    				    for(String item : main.allowedcmds) {
 	    				            cl.append(" /").append(item).append(",");
 	    				    }
 							sender.sendMessage(ChatColor.GRAY + "Allowed Commands:" + ChatColor.AQUA + (cl.toString()));
 							sender.sendMessage(ChatColor.GREEN + "Changes Made!");
-							saveConfig();
+							main.saveConfig();
 	                    }
 					}else if (args[1].equalsIgnoreCase("delcmd")) {
-	                    if (commandIsWhitelisted(args[2]) == false) {
+	                    if (main.commandIsWhitelisted(args[2]) == false) {
 	                    	sender.sendMessage(ChatColor.GRAY + "That command not yet whitelisted.");
 	                    }else{
-	                    	allowedcmds.remove(args[2].replace("/", ""));
-	                    	reloadConfig();
-	                    	getConfig().set("CameraMode.PlayersInCM.AllowedCommands", allowedcmds);
-	                    	saveConfig();
+	                    	main.allowedcmds.remove(args[2].replace("/", ""));
+	                    	main.reloadConfig();
+	                    	main.getConfig().set("CameraMode.PlayersInCM.AllowedCommands", main.allowedcmds);
+	                    	main.saveConfig();
 	    				    StringBuilder cl = new StringBuilder();
-	    				    for(String item : allowedcmds) {
+	    				    for(String item : main.allowedcmds) {
 	    				            cl.append(" /").append(item).append(",");
 	    				    }
 							sender.sendMessage(ChatColor.GRAY + "Allowed Commands:" + ChatColor.AQUA + (cl.toString()));
@@ -265,7 +268,7 @@ public class Commands extends CameraMode{
 	                    }
 					}else{
 						sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
-						if (getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
+						if (main.getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
 							sender.sendMessage(ChatColor.GRAY + "To toggle a cmd: " + ChatColor.GRAY + "/camera config (addcmd/delcmd) </command>");
 						}
 						sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
@@ -290,58 +293,58 @@ public class Commands extends CameraMode{
 				if (sender.hasPermission("cameramode.cm")) {
 					Player p = (Player) sender;
 					final String target = ((Player) sender).getUniqueId().toString();
-					if(flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
+					if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
 						((Player) sender).setAllowFlight(false);
-						Location loc = locations.get(p.getUniqueId().toString());
+						Location loc = main.locations.get(p.getUniqueId().toString());
 						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-						Commands pInst = this;
+						CameraMode pInst = main;
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 							public void run() {
-								flyplayers.remove(target);
+								main.flyplayers.remove(target);
 							}
 						}, 5L);
-						((Player) sender).addPotionEffects(effects.get(((Player) sender).getUniqueId().toString()));
+						((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-						int Fireup = fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
+						int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setFireTicks(Fireup);
-						int air = breath.get(((Player) sender).getUniqueId().toString()).intValue();
+						int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setRemainingAir(air);
-						((Player) sender).setVelocity(vel.get(((Player) sender).getUniqueId().toString()));
+						((Player) sender).setVelocity(main.vel.get(((Player) sender).getUniqueId().toString()));
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
 						}
-					}else if (flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
-						Commands pInst = this;
+					}else if (main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
+						CameraMode pInst = main;
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 						public void run() {
-						flyplayers.remove(target);
+						main.flyplayers.remove(target);
 						}
 						}, 5L);
-						int Fireup = fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
+						int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setFireTicks(Fireup);
-						int air = breath.get(((Player) sender).getUniqueId().toString()).intValue();
+						int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setRemainingAir(air);
-						Location loc = locations.get(p.getUniqueId().toString());
+						Location loc = main.locations.get(p.getUniqueId().toString());
 						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-						((Player) sender).setVelocity(vel.get(((Player) sender).getUniqueId().toString()));
+						((Player) sender).setVelocity(main.vel.get(((Player) sender).getUniqueId().toString()));
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-						((Player) sender).addPotionEffects(effects.get(((Player) sender).getUniqueId().toString()));
+						((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
 						}
 					}else{
-						flyplayers.add(target);
-						vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
-						locations.put(p.getUniqueId().toString(), p.getLocation());
+						main.flyplayers.add(target);
+						main.vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
+						main.locations.put(p.getUniqueId().toString(), p.getLocation());
 						((Player) sender).setAllowFlight(true);
-						fireticks.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getFireTicks());
+						main.fireticks.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getFireTicks());
 						((Player) sender).setFireTicks(0);
-						breath.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getRemainingAir());
-						effects.put(((Player) sender).getUniqueId().toString(), (List<PotionEffect>) ((Player) sender).getActivePotionEffects());
+						main.breath.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getRemainingAir());
+						main.effects.put(((Player) sender).getUniqueId().toString(), (List<PotionEffect>) ((Player) sender).getActivePotionEffects());
 						for (PotionEffect effect : ((Player) sender).getActivePotionEffects())
 					        ((Player) sender).removePotionEffect(effect.getType());
 						sender.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
-						if (getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
+						if (main.getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
 							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 								pl.hidePlayer(p);
 							}
@@ -351,7 +354,7 @@ public class Commands extends CameraMode{
 					sender.sendMessage(ChatColor.RED + "You do not have permission!");
 				}
 			}else{
-				getLogger().info("Usage: /cameramode <player> ");
+				main.getLogger().info("Usage: /cameramode <player> ");
 			}
   //##########################//
   //###- CameraMode Other -###//
@@ -361,48 +364,48 @@ public class Commands extends CameraMode{
 					if (Bukkit.getServer().getPlayerExact(args[0]) != null){
 						final Player targetPlayer = Bukkit.getServer().getPlayerExact(args[0]);
 						final String superTarget = targetPlayer.getUniqueId().toString();
-						if(flyplayers.contains(superTarget) && (targetPlayer).getGameMode() == (GameMode.SURVIVAL)) {
+						if(main.flyplayers.contains(superTarget) && (targetPlayer).getGameMode() == (GameMode.SURVIVAL)) {
 							targetPlayer.setAllowFlight(false);
-							Location loc = locations.get(superTarget);
+							Location loc = main.locations.get(superTarget);
 							targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-							CameraMode pInst = this;
+							CameraMode pInst = main;
 							pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 							public void run() {
-							flyplayers.remove(superTarget);
+							main.flyplayers.remove(superTarget);
 							}
 							}, 5L);
 							targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-							targetPlayer.setVelocity(vel.get(superTarget));
-							targetPlayer.addPotionEffects(effects.get(targetPlayer.getUniqueId().toString()));
+							targetPlayer.setVelocity(main.vel.get(superTarget));
+							targetPlayer.addPotionEffects(main.effects.get(targetPlayer.getUniqueId().toString()));
 							if (superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
 								sender.sendMessage(ChatColor.GRAY + "Try just /cm next time ;)");
 							}else{
 								targetPlayer.sendMessage(ChatColor.GOLD + "Courtacy of " + sender.getName().toString());
 								sender.sendMessage(ChatColor.GOLD + targetPlayer.getName().toString() + " has been ejected from CameraMode");
 							}
-							int Fireup = fireticks.get(superTarget).intValue();
+							int Fireup = main.fireticks.get(superTarget).intValue();
 							targetPlayer.setFireTicks(Fireup);
-							int air = breath.get(superTarget).intValue();
+							int air = main.breath.get(superTarget).intValue();
 							(targetPlayer).setRemainingAir(air);
 							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 								pl.showPlayer(targetPlayer);
 							}
-						}else if (flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
-							CameraMode pInst = this;
+						}else if (main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
+							CameraMode pInst = main;
 							pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 								public void run() {
-									flyplayers.remove(targetPlayer);
+									main.flyplayers.remove(targetPlayer);
 								}
 							}, 5L);
-							int Fireup = fireticks.get(superTarget).intValue();
+							int Fireup = main.fireticks.get(superTarget).intValue();
 							(targetPlayer).setFireTicks(Fireup);
-							int air = breath.get(superTarget).intValue();
+							int air = main.breath.get(superTarget).intValue();
 							(targetPlayer).setRemainingAir(air);
-							Location loc = locations.get(superTarget);
+							Location loc = main.locations.get(superTarget);
 							targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-							targetPlayer.setVelocity(vel.get(superTarget));
+							targetPlayer.setVelocity(main.vel.get(superTarget));
 							targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-							targetPlayer.addPotionEffects(effects.get(targetPlayer.getUniqueId().toString()));
+							targetPlayer.addPotionEffects(main.effects.get(targetPlayer.getUniqueId().toString()));
 							if (superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
 								sender.sendMessage(ChatColor.GRAY + "Try just /cm next time ;)");
 							}else{
@@ -413,14 +416,14 @@ public class Commands extends CameraMode{
 								pl.showPlayer(targetPlayer);
 							}
 						}else{
-						flyplayers.add(superTarget);
-						locations.put(superTarget, targetPlayer.getLocation());
+						main.flyplayers.add(superTarget);
+						main.locations.put(superTarget, targetPlayer.getLocation());
 						targetPlayer.setAllowFlight(true);
-						fireticks.put(superTarget, targetPlayer.getFireTicks());
+						main.fireticks.put(superTarget, targetPlayer.getFireTicks());
 						targetPlayer.setFireTicks(0);
-						vel.put(superTarget, targetPlayer.getVelocity());
-						breath.put(superTarget, targetPlayer.getRemainingAir());
-						effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
+						main.vel.put(superTarget, targetPlayer.getVelocity());
+						main.breath.put(superTarget, targetPlayer.getRemainingAir());
+						main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
 						for (PotionEffect effect : targetPlayer.getActivePotionEffects())
 					        targetPlayer.removePotionEffect(effect.getType());
 						targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
@@ -430,7 +433,7 @@ public class Commands extends CameraMode{
 								targetPlayer.sendMessage(ChatColor.GOLD + "Compliments of " + sender.getName().toString());
 								sender.sendMessage(ChatColor.GOLD + targetPlayer.getName().toString() + " has successfully been put in CameraMode");
 							}
-							if (getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
+							if (main.getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
 								for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 									pl.hidePlayer(targetPlayer);
 								}
@@ -448,65 +451,65 @@ public class Commands extends CameraMode{
 				if (Bukkit.getServer().getPlayerExact(args[0]) != null){
 					final Player targetPlayer = Bukkit.getServer().getPlayerExact(args[0]);
 					final String superTarget = targetPlayer.getUniqueId().toString();
-					if (!(flyplayers.contains(superTarget))){
-						flyplayers.add(superTarget);
-						locations.put(superTarget, targetPlayer.getLocation());
+					if (!(main.flyplayers.contains(superTarget))){
+						main.flyplayers.add(superTarget);
+						main.locations.put(superTarget, targetPlayer.getLocation());
 						targetPlayer.setAllowFlight(true);
-						fireticks.put(superTarget, targetPlayer.getFireTicks());
+						main.fireticks.put(superTarget, targetPlayer.getFireTicks());
 						targetPlayer.setFireTicks(0);
-						vel.put(superTarget, targetPlayer.getVelocity());
-						breath.put(superTarget, targetPlayer.getRemainingAir());
-						effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
+						main.vel.put(superTarget, targetPlayer.getVelocity());
+						main.breath.put(superTarget, targetPlayer.getRemainingAir());
+						main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
 						for (PotionEffect effect : targetPlayer.getActivePotionEffects())
 					        targetPlayer.removePotionEffect(effect.getType());
 						sender.sendMessage(ChatColor.GOLD + args[0] + " has successfully been put in CameraMode");
 						targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
 						targetPlayer.sendMessage(ChatColor.GOLD + "Compliments of " + ChatColor.GRAY + ChatColor.ITALIC + "CONSOLE.");
-						if (getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
+						if (main.getConfig().getBoolean("CameraMode.PlayersInCM.AreVanished") == true) {
 							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 								pl.hidePlayer(targetPlayer);
 							}
 						}
-					}else if (flyplayers.contains(superTarget) && (targetPlayer).getGameMode() == (GameMode.SURVIVAL)) {
+					}else if (main.flyplayers.contains(superTarget) && (targetPlayer).getGameMode() == (GameMode.SURVIVAL)) {
 						targetPlayer.setAllowFlight(false);
-						Location loc = locations.get(superTarget);
+						Location loc = main.locations.get(superTarget);
 						targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-						targetPlayer.setVelocity(vel.get(superTarget));
-						CameraMode pInst = this;
+						targetPlayer.setVelocity(main.vel.get(superTarget));
+						CameraMode pInst = main;
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 						public void run() {
-						flyplayers.remove(superTarget);
+						main.flyplayers.remove(superTarget);
 						}
 						}, 5L);
 						sender.sendMessage(ChatColor.GOLD + targetPlayer.getName().toString() + " has been ejected from CameraMode");
 						targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						targetPlayer.sendMessage(ChatColor.GOLD + "Courtacy of " +ChatColor.GRAY + ChatColor.ITALIC + "CONSOLE.");
-						targetPlayer.addPotionEffects(effects.get(superTarget));
-						int Fireup = fireticks.get(superTarget).intValue();
+						targetPlayer.addPotionEffects(main.effects.get(superTarget));
+						int Fireup = main.fireticks.get(superTarget).intValue();
 						targetPlayer.setFireTicks(Fireup);
-						int air = breath.get(superTarget).intValue();
+						int air = main.breath.get(superTarget).intValue();
 						(targetPlayer).setRemainingAir(air);
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(targetPlayer);
 						}
 					}else{
-						CameraMode pInst = this;
+						CameraMode pInst = main;
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 							public void run() {
-								flyplayers.remove(targetPlayer);
+								main.flyplayers.remove(targetPlayer);
 							}
 						}, 5L);
-						int Fireup = fireticks.get(superTarget).intValue();
+						int Fireup = main.fireticks.get(superTarget).intValue();
 						(targetPlayer).setFireTicks(Fireup);
-						int air = breath.get(superTarget).intValue();
+						int air = main.breath.get(superTarget).intValue();
 						(targetPlayer).setRemainingAir(air);
-						Location loc = locations.get(superTarget);
+						Location loc = main.locations.get(superTarget);
 						targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-						targetPlayer.setVelocity(vel.get(superTarget));
+						targetPlayer.setVelocity(main.vel.get(superTarget));
 						sender.sendMessage(ChatColor.GOLD + targetPlayer.getName().toString() + " has been ejected from CameraMode");
 						targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						targetPlayer.sendMessage(ChatColor.GOLD + "Courtacy of " +ChatColor.GRAY + ChatColor.ITALIC + "CONSOLE.");
-						targetPlayer.addPotionEffects(effects.get(superTarget));
+						targetPlayer.addPotionEffects(main.effects.get(superTarget));
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(targetPlayer);
 						}
