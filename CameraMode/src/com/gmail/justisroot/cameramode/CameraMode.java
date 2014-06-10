@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -34,13 +33,10 @@ public class CameraMode extends JavaPlugin {
 	
 	//###### - Objects - ######//
 	
-	Player playerr;
 	String reason = "You are in CameraMode!";
 	Updater updater;
 	Events event;
-	Entity putMobs = mobs.put(playerr.getUniqueId().toString(), (Entity) playerr.getNearbyEntities(15, 15, 15));
-	Entity getMobs = mobs.get(playerr.getUniqueId().toString());
-	UpdateType biff = (getConfig().getBoolean("CameraMode.Updates.AutoUpdate")) ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD;
+	UpdateType biff = getConfig().getBoolean("CameraMode.Updates.AutoUpdate") ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD;
 	
 	//############################//
 	//#########- Start - #########//
