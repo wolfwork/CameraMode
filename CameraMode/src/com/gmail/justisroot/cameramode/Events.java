@@ -164,8 +164,47 @@ public class Events implements Listener {
 		}
 	}
 	@EventHandler
-	public void onPlayerLeave(PlayerQuitEvent e) {
-		
+	public void onPlayerLeave(final PlayerQuitEvent e) {
+		if(main.flyplayers.contains(e.getPlayer().getUniqueId().toString()) && e.getPlayer().getGameMode() == (GameMode.SURVIVAL)) {
+			e.getPlayer().setAllowFlight(false);
+			Location loc = main.locations.get(e.getPlayer().getUniqueId().toString());
+			e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+			CameraMode pInst = main;
+			pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+				public void run() {
+					main.flyplayers.remove(e.getPlayer().getUniqueId().toString());
+				}
+			}, 5L);
+			e.getPlayer().addPotionEffects(main.effects.get(e.getPlayer().getUniqueId().toString()));
+			e.getPlayer().sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+			int Fireup = main.fireticks.get(e.getPlayer().getUniqueId().toString()).intValue();
+			e.getPlayer().setFireTicks(Fireup);
+			int air = main.breath.get(e.getPlayer().getUniqueId().toString()).intValue();
+			e.getPlayer().setRemainingAir(air);
+			e.getPlayer().setVelocity(main.vel.get(e.getPlayer().getUniqueId().toString()));
+			for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+				pl.showPlayer(e.getPlayer());
+			}
+		}else if (main.flyplayers.contains(e.getPlayer().getUniqueId().toString()) && e.getPlayer().getGameMode() == (GameMode.CREATIVE)) {
+			CameraMode pInst = main;
+			pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+				public void run() {
+					main.flyplayers.remove(e.getPlayer().getUniqueId().toString());
+				}
+			}, 5L);
+			int Fireup = main.fireticks.get(e.getPlayer().getUniqueId().toString()).intValue();
+			e.getPlayer().setFireTicks(Fireup);
+			int air = main.breath.get(e.getPlayer().getUniqueId().toString()).intValue();
+			e.getPlayer().setRemainingAir(air);
+			Location loc = main.locations.get(e.getPlayer().getUniqueId().toString());
+			e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+			e.getPlayer().setVelocity(main.vel.get(e.getPlayer().getUniqueId().toString()));
+			e.getPlayer().sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+			e.getPlayer().addPotionEffects(main.effects.get(e.getPlayer().getUniqueId().toString()));
+			for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+				pl.showPlayer(e.getPlayer());
+			}
+		}		
 	}
 	@EventHandler
 	public void onPlayerToggleFlight(PlayerToggleFlightEvent e) {
