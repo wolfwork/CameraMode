@@ -7,14 +7,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-public class Commands{
+public class Commands implements CommandExecutor{
 	
 
 	CameraMode main;
+
+	public Commands(CameraMode plugin){
+		this.main = plugin;
+	}
 	
 	@SuppressWarnings({ "deprecation" })
 	public boolean onCommand(CommandSender sender, Command cmd, String StringLabel, String[] args) {
@@ -333,7 +338,7 @@ public class Commands{
 							pl.showPlayer(p);
 						}
 					}else{
-						if (!(main.pvpTimer.contains(((Player) sender).getUniqueId().toString()))) {
+						if (!(main.pvpTimer.containsKey(((Player) sender).getUniqueId().toString()))) {
 							main.flyplayers.add(target);
 							main.vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
 							main.locations.put(p.getUniqueId().toString(), p.getLocation());
@@ -351,7 +356,7 @@ public class Commands{
 								}
 							}
 						}else{
-							sender.sendMessage(ChatColor.RED + "You cannot CameraMode while in battle!");
+							sender.sendMessage(ChatColor.RED + "You cannot CameraMode while in battle! " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + main.pvpTimer.get(((Player) sender).getUniqueId().toString()).intValue() + ChatColor.DARK_GRAY + "]");
 						}
 					}
 				}else{
@@ -420,7 +425,7 @@ public class Commands{
 								pl.showPlayer(targetPlayer);
 							}
 						}else{
-							if (!(main.pvpTimer.contains(superTarget))){
+							if (!(main.pvpTimer.containsKey(superTarget))){
 							main.flyplayers.add(superTarget);
 							main.locations.put(superTarget, targetPlayer.getLocation());
 							targetPlayer.setAllowFlight(true);
@@ -444,7 +449,7 @@ public class Commands{
 									}
 								}
 							}else{
-								sender.sendMessage(ChatColor.RED + "This player is currently currently battling.");
+								sender.sendMessage(ChatColor.RED + args[0] + " is currently currently battling. " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + main.pvpTimer.get(superTarget).intValue() + ChatColor.DARK_GRAY + "]");
 							}
 						}
 					}else{
@@ -460,7 +465,7 @@ public class Commands{
 					final Player targetPlayer = Bukkit.getServer().getPlayerExact(args[0]);
 					final String superTarget = targetPlayer.getUniqueId().toString();
 					if (!(main.flyplayers.contains(superTarget))){
-						if (!(main.pvpTimer.contains(superTarget))){
+						if (!(main.pvpTimer.containsKey(superTarget))){
 							main.flyplayers.add(superTarget);
 							main.locations.put(superTarget, targetPlayer.getLocation());
 							targetPlayer.setAllowFlight(true);

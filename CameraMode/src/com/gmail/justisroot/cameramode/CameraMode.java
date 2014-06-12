@@ -29,20 +29,21 @@ public class CameraMode extends JavaPlugin {
 	public HashMap<String, List<PotionEffect>> effects = new HashMap<String, List<PotionEffect>>();
 	public HashMap<String, Vector> vel = new HashMap<String, Vector>();
 	public HashMap<String, Entity> mobs = new HashMap<String, Entity>();
-	public ArrayList<String> pvpTimer = new ArrayList<String>();
+	public HashMap<String, Integer> pvpTimer = new HashMap<String, Integer>();
 	
 	//###### - Objects - ######//
 	
+
 	String reason = "You are in CameraMode!";
-	Updater updater;
-	Events event;
 	UpdateType biff = getConfig().getBoolean("CameraMode.Updates.AutoUpdate") ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD;
+
+	public ArrayList<String> commands = new ArrayList<String>();
+	
 	
 	//############################//
 	//#########- Start - #########//
 	//############################//
 	
-	@Override
 	public void onEnable() {
 		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
@@ -51,13 +52,17 @@ public class CameraMode extends JavaPlugin {
 			getLogger().info("Plugin Disable Setting Detected...");
 			getServer().getPluginManager().disablePlugin(this);
 		}
-		getServer().getPluginManager().registerEvents(event, this);
+		getServer().getPluginManager().registerEvents(new Events(this), this);
 		PluginDescriptionFile pdfFile = this.getDescription();
+		commands.add("camera");
+		commands.add("cameramode");
+		for (String commands : this.commands){
+			getCommand(commands).setExecutor(new Commands(this));
+		}
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been enabled"); 
 		@SuppressWarnings("unused")
 		Updater updater = new Updater(this, 80542, getFile(), biff, true);
 	}
-	@Override
 	public void onDisable(){
 		reloadConfig();
 		PluginDescriptionFile pdfFile = this.getDescription();

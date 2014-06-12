@@ -1,5 +1,6 @@
 package com.gmail.justisroot.cameramode;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -53,7 +54,15 @@ public class Events implements Listener {
 
 	CameraMode main;
 	Updater updater;
+	public int ID;
 	String reason = "You are in CameraMode!";
+
+	public Events(CameraMode plugin){
+		this.main = plugin;
+	}
+	public Events(Updater plugin){
+		this.updater = plugin;
+	}
 
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
@@ -65,13 +74,22 @@ public class Events implements Listener {
 			}else{
 				if (main.getConfig().getLong("CameraMode.PvpTimer") != 0){
 					if (e.getEntity() instanceof Zombie || e.getEntity() instanceof Slime || e.getEntity() instanceof Player || e.getEntity() instanceof Skeleton || e.getEntity() instanceof Creeper || e.getEntity() instanceof Spider || e.getEntity() instanceof Witch || e.getEntity() instanceof Wolf || e.getEntity() instanceof Blaze || e.getEntity() instanceof Ghast || e.getEntity() instanceof MagmaCube || e.getEntity() instanceof Arrow || e.getEntity() instanceof CaveSpider || e.getEntity() instanceof EnderDragon | e.getEntity() instanceof PigZombie || e.getEntity() instanceof Silverfish || e.getEntity() instanceof Fireball || e.getEntity() instanceof WitherSkull || e.getEntity() instanceof Wither || e.getEntity() instanceof IronGolem || e.getEntity() instanceof Giant){
-					 main.pvpTimer.add(e.getDamager().getUniqueId().toString());
-					 CameraMode pInst = main;
-						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-							public void run() {
-								main.pvpTimer.remove(player.getUniqueId().toString());
-							}
-						}, main.getConfig().getLong("CameraMode.PvpTimer"));
+						if (!main.pvpTimer.containsKey(player.getUniqueId().toString())){
+							main.pvpTimer.put(e.getDamager().getUniqueId().toString(), main.getConfig().getInt("CameraMode.PvpTimer") +1);
+							ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+								public void run() {
+										main.pvpTimer.put(player.getUniqueId().toString(), main.pvpTimer.get(player.getUniqueId().toString()) - 1);
+										if (main.pvpTimer.get(player.getUniqueId().toString()) == 1){
+											Bukkit.getScheduler().cancelTask(ID);
+										}
+								}
+							}, 0,20);
+							main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+								public void run() {
+									main.pvpTimer.remove(player.getUniqueId().toString());
+								}
+							},20 * main.getConfig().getLong("CameraMode.PvpTimer"));
+						}
 					}
 				}
 			}
@@ -82,14 +100,23 @@ public class Events implements Listener {
 				e.setCancelled(true);
 			}else{
 				if (main.getConfig().getLong("CameraMode.PvpTimer") != 0){
-					if (e.getEntity() instanceof Zombie || e.getEntity() instanceof Slime || e.getEntity() instanceof Player || e.getEntity() instanceof Skeleton || e.getEntity() instanceof Creeper || e.getEntity() instanceof Spider || e.getEntity() instanceof Witch || e.getEntity() instanceof Wolf || e.getEntity() instanceof Blaze || e.getEntity() instanceof Ghast || e.getEntity() instanceof MagmaCube || e.getEntity() instanceof Arrow || e.getEntity() instanceof CaveSpider || e.getEntity() instanceof EnderDragon | e.getEntity() instanceof PigZombie || e.getEntity() instanceof Silverfish || e.getEntity() instanceof Fireball || e.getEntity() instanceof WitherSkull || e.getEntity() instanceof Wither || e.getEntity() instanceof IronGolem || e.getEntity() instanceof Giant){
-						main.pvpTimer.add(e.getDamager().getUniqueId().toString());
-						CameraMode pInst = main;
-						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-							public void run() {
-								main.pvpTimer.remove(entiti.getUniqueId().toString());
-							}
-						}, main.getConfig().getLong("CameraMode.PvpTimer"));
+					if (e.getDamager() instanceof Zombie || e.getEntity() instanceof Slime || e.getEntity() instanceof Player || e.getEntity() instanceof Skeleton || e.getEntity() instanceof Creeper || e.getEntity() instanceof Spider || e.getEntity() instanceof Witch || e.getEntity() instanceof Wolf || e.getEntity() instanceof Blaze || e.getEntity() instanceof Ghast || e.getEntity() instanceof MagmaCube || e.getEntity() instanceof Arrow || e.getEntity() instanceof CaveSpider || e.getEntity() instanceof EnderDragon | e.getEntity() instanceof PigZombie || e.getEntity() instanceof Silverfish || e.getEntity() instanceof Fireball || e.getEntity() instanceof WitherSkull || e.getEntity() instanceof Wither || e.getEntity() instanceof IronGolem || e.getEntity() instanceof Giant){
+						if (!main.pvpTimer.containsKey(entiti.getUniqueId().toString())){
+							main.pvpTimer.put(e.getEntity().getUniqueId().toString(), main.getConfig().getInt("CameraMode.PvpTimer") + 1);
+							main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+								public void run() {
+										main.pvpTimer.put(entiti.getUniqueId().toString(), main.pvpTimer.get(entiti.getUniqueId().toString()) - 1);
+										if (main.pvpTimer.get(entiti.getUniqueId().toString()) == 1){
+											Bukkit.getScheduler().cancelTask(ID);
+										}
+								}
+							}, 0,20);
+							main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+								public void run() {
+									main.pvpTimer.remove(entiti.getUniqueId().toString());
+								}
+							},20 * main.getConfig().getLong("CameraMode.PvpTimer"));
+						}
 					}
 				}
 			}
