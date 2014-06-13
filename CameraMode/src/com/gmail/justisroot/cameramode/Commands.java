@@ -296,25 +296,26 @@ public class Commands implements CommandExecutor{
 		if (args.length == 0) {
 			if (sender instanceof Player) {
 				if (sender.hasPermission("cameramode.cm")) {
-					Player p = (Player) sender;
+					final Player p = (Player) sender;
 					final String target = ((Player) sender).getUniqueId().toString();
 					if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
 						((Player) sender).setAllowFlight(false);
 						Location loc = main.locations.get(p.getUniqueId().toString());
 						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						CameraMode pInst = main;
+						p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 							public void run() {
-								main.flyplayers.remove(target);
+								p.setVelocity(main.vel.get(p.getUniqueId().toString()));
 							}
-						}, 5L);
+						}, (long) 0.5);
+						main.flyplayers.remove(target);
 						((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setFireTicks(Fireup);
 						int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setRemainingAir(air);
-						((Player) sender).setVelocity(main.vel.get(((Player) sender).getUniqueId().toString()));
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
 						}
@@ -322,16 +323,17 @@ public class Commands implements CommandExecutor{
 						CameraMode pInst = main;
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 						public void run() {
-						main.flyplayers.remove(target);
+						p.setVelocity(main.vel.get(p.getUniqueId().toString()));
 						}
-						}, 5L);
+						}, 1L);
+						main.flyplayers.remove(target);
+						p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
 						int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setFireTicks(Fireup);
 						int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
 						((Player) sender).setRemainingAir(air);
 						Location loc = main.locations.get(p.getUniqueId().toString());
 						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-						((Player) sender).setVelocity(main.vel.get(((Player) sender).getUniqueId().toString()));
 						sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 						((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
@@ -340,6 +342,7 @@ public class Commands implements CommandExecutor{
 					}else{
 						if (!(main.pvpTimer.containsKey(((Player) sender).getUniqueId().toString()))) {
 							main.flyplayers.add(target);
+							main.falldistance.put(p.getUniqueId().toString(), p.getFallDistance());
 							main.vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
 							main.locations.put(p.getUniqueId().toString(), p.getLocation());
 							((Player) sender).setAllowFlight(true);
@@ -380,11 +383,12 @@ public class Commands implements CommandExecutor{
 							CameraMode pInst = main;
 							pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 							public void run() {
-							main.flyplayers.remove(superTarget);
-							}
-							}, 5L);
-							targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 							targetPlayer.setVelocity(main.vel.get(superTarget));
+							}
+							}, 1L);
+							main.flyplayers.remove(superTarget);
+							targetPlayer.setFallDistance(main.falldistance.get(targetPlayer.getUniqueId().toString()));
+							targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 							targetPlayer.addPotionEffects(main.effects.get(targetPlayer.getUniqueId().toString()));
 							if (superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
 								sender.sendMessage(ChatColor.GRAY + "Try just /cm next time ;)");
@@ -403,16 +407,17 @@ public class Commands implements CommandExecutor{
 							CameraMode pInst = main;
 							pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 								public void run() {
-									main.flyplayers.remove(targetPlayer);
+									targetPlayer.setVelocity(main.vel.get(superTarget));
 								}
-							}, 5L);
+							}, 1L);
+							main.flyplayers.remove(targetPlayer);
 							int Fireup = main.fireticks.get(superTarget).intValue();
 							(targetPlayer).setFireTicks(Fireup);
 							int air = main.breath.get(superTarget).intValue();
 							(targetPlayer).setRemainingAir(air);
+							targetPlayer.setFallDistance(main.falldistance.get(targetPlayer.getUniqueId().toString()));
 							Location loc = main.locations.get(superTarget);
 							targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-							targetPlayer.setVelocity(main.vel.get(superTarget));
 							targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 							targetPlayer.addPotionEffects(main.effects.get(targetPlayer.getUniqueId().toString()));
 							if (superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
@@ -434,8 +439,10 @@ public class Commands implements CommandExecutor{
 							main.vel.put(superTarget, targetPlayer.getVelocity());
 							main.breath.put(superTarget, targetPlayer.getRemainingAir());
 							main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
-							for (PotionEffect effect : targetPlayer.getActivePotionEffects())
+							for (PotionEffect effect : targetPlayer.getActivePotionEffects()){
 						        targetPlayer.removePotionEffect(effect.getType());
+							}
+							main.falldistance.put(targetPlayer.getUniqueId().toString(), targetPlayer.getFallDistance());
 							targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
 								if (superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
 									sender.sendMessage(ChatColor.GRAY + "Try just /cm next time ;)");
@@ -471,6 +478,7 @@ public class Commands implements CommandExecutor{
 							targetPlayer.setAllowFlight(true);
 							main.fireticks.put(superTarget, targetPlayer.getFireTicks());
 							targetPlayer.setFireTicks(0);
+							main.falldistance.put(targetPlayer.getUniqueId().toString(), targetPlayer.getFallDistance());
 							main.vel.put(superTarget, targetPlayer.getVelocity());
 							main.breath.put(superTarget, targetPlayer.getRemainingAir());
 							main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
@@ -493,6 +501,7 @@ public class Commands implements CommandExecutor{
 						targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						targetPlayer.setVelocity(main.vel.get(superTarget));
 						CameraMode pInst = main;
+						targetPlayer.setFallDistance(main.falldistance.get(targetPlayer.getUniqueId().toString()));
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 						public void run() {
 						main.flyplayers.remove(superTarget);
@@ -500,6 +509,7 @@ public class Commands implements CommandExecutor{
 						}, 5L);
 						sender.sendMessage(ChatColor.GOLD + targetPlayer.getName().toString() + " has been ejected from CameraMode");
 						targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+						targetPlayer.setFallDistance(main.falldistance.get(targetPlayer.getUniqueId().toString()));
 						targetPlayer.sendMessage(ChatColor.GOLD + "Courtacy of " +ChatColor.GRAY + ChatColor.ITALIC + "CONSOLE.");
 						targetPlayer.addPotionEffects(main.effects.get(superTarget));
 						int Fireup = main.fireticks.get(superTarget).intValue();
@@ -521,6 +531,7 @@ public class Commands implements CommandExecutor{
 						int air = main.breath.get(superTarget).intValue();
 						(targetPlayer).setRemainingAir(air);
 						Location loc = main.locations.get(superTarget);
+						targetPlayer.setFallDistance(main.falldistance.get(targetPlayer.getUniqueId().toString()));
 						targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 						targetPlayer.setVelocity(main.vel.get(superTarget));
 						sender.sendMessage(ChatColor.GOLD + targetPlayer.getName().toString() + " has been ejected from CameraMode");

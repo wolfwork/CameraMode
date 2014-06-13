@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -30,6 +31,7 @@ public class CameraMode extends JavaPlugin {
 	public HashMap<String, Vector> vel = new HashMap<String, Vector>();
 	public HashMap<String, Entity> mobs = new HashMap<String, Entity>();
 	public HashMap<String, Integer> pvpTimer = new HashMap<String, Integer>();
+	public HashMap<String, Float> falldistance = new HashMap<String, Float>();
 	
 	//###### - Objects - ######//
 	
@@ -67,13 +69,14 @@ public class CameraMode extends JavaPlugin {
 		reloadConfig();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been disabled");
+		
 	}
 	
 	//#############################//
 	//########- Booleans -#########//
 	//#############################//
 	
-	 public boolean commandIsWhitelisted(String playerCmd) {
+	public boolean commandIsWhitelisted(String playerCmd) {
         playerCmd = playerCmd.replace("/", "");
         for(String allowedCmd : this.allowedcmds) {
                 allowedCmd = allowedCmd.replace("/", "");

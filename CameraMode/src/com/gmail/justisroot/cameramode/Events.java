@@ -1,5 +1,8 @@
 package com.gmail.justisroot.cameramode;
 
+import java.util.Iterator;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -48,6 +51,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
 public class Events implements Listener {
@@ -103,7 +107,7 @@ public class Events implements Listener {
 					if (e.getDamager() instanceof Zombie || e.getEntity() instanceof Slime || e.getEntity() instanceof Player || e.getEntity() instanceof Skeleton || e.getEntity() instanceof Creeper || e.getEntity() instanceof Spider || e.getEntity() instanceof Witch || e.getEntity() instanceof Wolf || e.getEntity() instanceof Blaze || e.getEntity() instanceof Ghast || e.getEntity() instanceof MagmaCube || e.getEntity() instanceof Arrow || e.getEntity() instanceof CaveSpider || e.getEntity() instanceof EnderDragon | e.getEntity() instanceof PigZombie || e.getEntity() instanceof Silverfish || e.getEntity() instanceof Fireball || e.getEntity() instanceof WitherSkull || e.getEntity() instanceof Wither || e.getEntity() instanceof IronGolem || e.getEntity() instanceof Giant){
 						if (!main.pvpTimer.containsKey(entiti.getUniqueId().toString())){
 							main.pvpTimer.put(e.getEntity().getUniqueId().toString(), main.getConfig().getInt("CameraMode.PvpTimer") + 1);
-							main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+							ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
 										main.pvpTimer.put(entiti.getUniqueId().toString(), main.pvpTimer.get(entiti.getUniqueId().toString()) - 1);
 										if (main.pvpTimer.get(entiti.getUniqueId().toString()) == 1){
@@ -145,6 +149,47 @@ public class Events implements Listener {
 		}
 	}
 	@EventHandler
+	public void onPluginDisable(PluginDisableEvent e){
+		Iterator <String> iterator = main.flyplayers.iterator();
+		while(iterator.hasNext()){
+			UUID blah = UUID.fromString(iterator.next());
+			Player p = main.getServer().getPlayer(blah);
+			if(main.flyplayers.contains(p.getUniqueId().toString()) && p.getGameMode() == (GameMode.SURVIVAL)) {
+				p.setAllowFlight(false);
+				Location loc = main.locations.get(p.getUniqueId().toString());
+				p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+
+				p.addPotionEffects(main.effects.get(p.getUniqueId().toString()));
+				p.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+				int Fireup = main.fireticks.get(p.getUniqueId().toString()).intValue();
+				p.setFireTicks(Fireup);
+				p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
+				int air = main.breath.get(p.getUniqueId().toString()).intValue();
+				p.setRemainingAir(air);
+				p.setVelocity(main.vel.get(p.getUniqueId().toString()));
+				for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+					pl.showPlayer(p);
+				}
+			}else if (main.flyplayers.contains(p.getUniqueId().toString()) && p.getGameMode() == (GameMode.CREATIVE)) {
+
+				int Fireup = main.fireticks.get(p.getUniqueId().toString()).intValue();
+				p.setFireTicks(Fireup);
+				int air = main.breath.get(p.getUniqueId().toString()).intValue();
+				p.setRemainingAir(air);
+				Location loc = main.locations.get(p.getUniqueId().toString());
+				p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
+				p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+				p.setVelocity(main.vel.get(p.getUniqueId().toString()));
+				p.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+				p.addPotionEffects(main.effects.get(p.getUniqueId().toString()));
+				for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+					pl.showPlayer(p);
+				}
+				iterator.remove();
+			}
+		}
+	}
+	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		if (main.flyplayers.contains(e.getPlayer().getUniqueId().toString())) {
 			if(e.isCancelled() == false){
@@ -179,6 +224,7 @@ public class Events implements Listener {
 			e.getPlayer().sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 			int Fireup = main.fireticks.get(e.getPlayer().getUniqueId().toString()).intValue();
 			e.getPlayer().setFireTicks(Fireup);
+			e.getPlayer().setFallDistance(main.falldistance.get(e.getPlayer().getUniqueId().toString()));
 			int air = main.breath.get(e.getPlayer().getUniqueId().toString()).intValue();
 			e.getPlayer().setRemainingAir(air);
 			e.getPlayer().setVelocity(main.vel.get(e.getPlayer().getUniqueId().toString()));
@@ -197,6 +243,7 @@ public class Events implements Listener {
 			int air = main.breath.get(e.getPlayer().getUniqueId().toString()).intValue();
 			e.getPlayer().setRemainingAir(air);
 			Location loc = main.locations.get(e.getPlayer().getUniqueId().toString());
+			e.getPlayer().setFallDistance(main.falldistance.get(e.getPlayer().getUniqueId().toString()));
 			e.getPlayer().teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 			e.getPlayer().setVelocity(main.vel.get(e.getPlayer().getUniqueId().toString()));
 			e.getPlayer().sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
