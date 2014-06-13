@@ -6,7 +6,7 @@ commands:
     cameramode:
         usage: /cameramode
         description: Puts player in cameramode
-        aliases: [cm]
+        aliases: [cm,cmode, cammode]
     camera reload:
         usage: /cameramode reload
         description: Reloads config
@@ -14,6 +14,7 @@ commands:
     camera:
         usage: /camera
         description: opens the help page
+        aliases: [cam]
 permissions:
     cameramode.*:
         description: Give access to all CameraMode permissions

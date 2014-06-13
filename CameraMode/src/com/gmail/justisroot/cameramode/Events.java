@@ -152,7 +152,6 @@ public class Events implements Listener {
 	public void onPluginDisable(PluginDisableEvent e){
 		Iterator <String> iterator = main.flyplayers.iterator();
 		while(iterator.hasNext()){
-			iterator.next();
 			UUID blah = UUID.fromString(iterator.next());
 			Player p = main.getServer().getPlayer(blah);
 			if(main.flyplayers.contains(p.getUniqueId().toString()) && p.getGameMode() == (GameMode.SURVIVAL)) {
@@ -184,8 +183,8 @@ public class Events implements Listener {
 				for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 					pl.showPlayer(p);
 				}
-				iterator.remove();
 			}
+			iterator.remove();
 		}
 	}
 	@EventHandler
@@ -406,3 +405,4 @@ public class Events implements Listener {
     }
 
 }
+

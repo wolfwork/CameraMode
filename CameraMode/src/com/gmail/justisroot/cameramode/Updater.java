@@ -432,9 +432,10 @@ public class Updater{
         new File(file).delete();
     }
 
+ 
     /**
      * Check if the name of a jar is one of the plugins currently installed, used for extracting the correct files out of a zip.
-     *
+     * 
      * @param name a name to check for inside the plugins folder.
      * @return true if a file inside the plugins folder is named this.
      */
@@ -446,7 +447,6 @@ public class Updater{
         }
         return false;
     }
-
     /**
      * Check to see if the program should continue by evaluating whether the plugin is already updated, or shouldn't be updated.
      *
@@ -476,7 +476,6 @@ public class Updater{
         }
         return true;
     }
-
     /**
      * <b>If you wish to run mathematical versioning checks, edit this method.</b>
      * <p>
@@ -507,7 +506,6 @@ public class Updater{
     public boolean shouldUpdate(String localVersion, String remoteVersion) {
         return !localVersion.equalsIgnoreCase(remoteVersion);
     }
-
     /**
      * Evaluate whether the version number is marked showing that it should not be updated by this program.
      *
@@ -522,7 +520,6 @@ public class Updater{
         }
         return false;
     }
-
     /**
      * Make a connection to the BukkitDev API and request the newest file's details.
      *
@@ -532,30 +529,23 @@ public class Updater{
         try {
             final URLConnection conn = this.url.openConnection();
             conn.setConnectTimeout(5000);
-
             if (this.apiKey != null) {
                 conn.addRequestProperty("X-API-Key", this.apiKey);
             }
             conn.addRequestProperty("User-Agent", Updater.USER_AGENT);
-
             conn.setDoOutput(true);
-
             final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             final String response = reader.readLine();
-
             final JSONArray array = (JSONArray) JSONValue.parse(response);
-
             if (array.size() == 0) {
                 this.plugin.getLogger().warning("The updater could not find any files for the project id " + this.id);
                 this.result = UpdateResult.FAIL_BADID;
                 return false;
             }
-
             this.versionName = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.TITLE_VALUE);
             this.versionLink = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.LINK_VALUE);
             this.versionType = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.TYPE_VALUE);
             this.versionGameVersion = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.VERSION_VALUE);
-
             return true;
         } catch (final IOException e) {
             if (e.getMessage().contains("HTTP response code: 403")) {
@@ -567,13 +557,10 @@ public class Updater{
                 this.plugin.getLogger().severe("If you have not recently modified your configuration and this is the first time you are seeing this message, the site may be experiencing temporary downtime.");
                 this.result = UpdateResult.FAIL_DBO;
             }
-            this.plugin.getLogger().log(Level.SEVERE, null, e);
             return false;
         }
     }
-
     private class UpdateRunnable implements Runnable {
-
         @Override
         public void run() {
             if (Updater.this.url != null) {
