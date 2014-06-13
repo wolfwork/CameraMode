@@ -84,4 +84,12 @@ public class CameraMode extends JavaPlugin {
         }
         return false;
 	}
+	public boolean isInt(String s) {
+	    try {
+	        Integer.parseInt(s);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
 }

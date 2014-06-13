@@ -80,6 +80,7 @@ public class Commands implements CommandExecutor{
 					sender.sendMessage(ChatColor.GRAY + "[3] " + ChatColor.DARK_AQUA + "CameraModed Players are Vanished: " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.AreVanished"));
 					sender.sendMessage(ChatColor.GRAY + "[4] " + ChatColor.DARK_AQUA + "CameraModed Players can Change Worlds " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds"));
 					sender.sendMessage(ChatColor.GRAY + "[5] " + ChatColor.DARK_AQUA + "CameraModed Players can Use Commands " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.CanUseCommands"));
+					sender.sendMessage(ChatColor.GRAY + "[6] " + ChatColor.DARK_AQUA + "Players in battle have to wait " + ChatColor.RED + main.getConfig().getInt("CameraMode.PvpTimer") + ChatColor.GRAY + " seconds before CMing");
 					if (main.getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
 						sender.sendMessage(ChatColor.GRAY + "To toggle a cmd: " + ChatColor.GRAY + "/camera config (addcmd/delcmd) </command>");
 						sender.sendMessage(ChatColor.GRAY + "Allowed Commands:" + ChatColor.AQUA + (cl.toString()));
@@ -105,7 +106,7 @@ public class Commands implements CommandExecutor{
 		}else if (args.length == 2){
 			if (args[0].equalsIgnoreCase("config")) {   
 				if (sender.hasPermission("cameramode.config") || !(sender instanceof Player)) { 
-					sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+					sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (newValue)");
 					sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
 					if (main.getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
 						sender.sendMessage(ChatColor.GRAY + "To toggle a cmd: " + ChatColor.GRAY + "/camera config (addcmd/delcmd) </command>");
@@ -140,7 +141,7 @@ public class Commands implements CommandExecutor{
 								main.saveConfig();
 							}
 						}else{
-							sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (newValue)");
 							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
 						}
 						
@@ -165,7 +166,7 @@ public class Commands implements CommandExecutor{
 								main.saveConfig();
 							}
 						}else{
-							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (newValue)");
 							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
 						}
 	/*Vanished*/
@@ -189,7 +190,7 @@ public class Commands implements CommandExecutor{
 								main.saveConfig();
 							}
 						}else{
-							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (newValue)");
 							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
 						}
   /*World_Change*/  
@@ -213,7 +214,24 @@ public class Commands implements CommandExecutor{
 								main.saveConfig();
 							}
 						}else{
-							sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (newValue)");
+							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
+						}
+    /*PvpTimer*/
+					}else if (args[1].equalsIgnoreCase("6")){
+						if (main.isInt(args[2])){
+							int vall = Integer.parseInt(args[2]);
+							if (main.getConfig().getInt("CameraMode.PvpTimer") == (vall)){
+							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already set to " + ChatColor.DARK_AQUA + main.getConfig().getInt("CameraMode.PvpTimer"));
+							}else{
+								main.reloadConfig();
+								main.getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", vall);
+								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
+								main.saveConfig();
+							}
+						}else{
+							sender.sendMessage(ChatColor.RED + "This option only accepts integers!");
+							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (newValue)");
 							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
 						}
    /*UseCommands*/
@@ -237,7 +255,7 @@ public class Commands implements CommandExecutor{
 								main.saveConfig();
 							}
 						}else{
-							sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+							sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (newValue)");
 							sender.sendMessage(ChatColor.AQUA + "To view available options and their #, " + ChatColor.DARK_AQUA + "/camera config");
 						}
 	/*Commands*/
@@ -272,7 +290,7 @@ public class Commands implements CommandExecutor{
 							sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 	                    }
 					}else{
-						sender.sendMessage(ChatColor.AQUA + "to modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (true/false)");
+						sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.DARK_GRAY + "/camera config (option#) (newValue)");
 						if (main.getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
 							sender.sendMessage(ChatColor.GRAY + "To toggle a cmd: " + ChatColor.GRAY + "/camera config (addcmd/delcmd) </command>");
 						}
@@ -283,7 +301,7 @@ public class Commands implements CommandExecutor{
 				}
 			}
 	//########################//
-	//#####- CameraMode -#####//       //Add PvpTimer to this v
+	//#####- CameraMode -#####// 
 		}else{
 			if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) || (sender.hasPermission("cameramode.camera")) || sender.hasPermission("cameramode.config")) {
 				sender.sendMessage(ChatColor.RED + "Too many arguments.");
@@ -297,7 +315,7 @@ public class Commands implements CommandExecutor{
 			if (sender instanceof Player) {
 				if (sender.hasPermission("cameramode.cm")) {
 					final Player p = (Player) sender;
-					final String target = ((Player) sender).getUniqueId().toString();
+					String target = ((Player) sender).getUniqueId().toString();
 					if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
 						((Player) sender).setAllowFlight(false);
 						Location loc = main.locations.get(p.getUniqueId().toString());
