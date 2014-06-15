@@ -16,3 +16,5 @@ CameraMode:
         - camera
         - cameramode
         - cm
+    CameraTimeLimit: 15
+    CameraCoolDown: 15

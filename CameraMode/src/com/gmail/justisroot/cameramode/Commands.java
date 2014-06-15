@@ -80,10 +80,10 @@ public class Commands implements CommandExecutor{
 					sender.sendMessage(ChatColor.GRAY + "[3] " + ChatColor.DARK_AQUA + "CameraModed Players are Vanished: " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.AreVanished"));
 					sender.sendMessage(ChatColor.GRAY + "[4] " + ChatColor.DARK_AQUA + "CameraModed Players can Change Worlds: " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds"));
 					sender.sendMessage(ChatColor.GRAY + "[5] " + ChatColor.DARK_AQUA + "CameraModed Players can Use Commands: " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.CanUseCommands"));
-					sender.sendMessage(ChatColor.GRAY + "[6] " + ChatColor.DARK_AQUA + "Players in battle have to wait " + ChatColor.RED + main.getConfig().getInt("CameraMode.PvpTimer") + ChatColor.DARK_AQUA + " seconds before CModing.");
+					sender.sendMessage(ChatColor.GRAY + "[6] " + ChatColor.DARK_AQUA + "Battling Players have to wait " + ChatColor.RED + main.getConfig().getInt("CameraMode.PvpTimer") + ChatColor.DARK_AQUA + "s before CameraModing");
 					if (main.getConfig().getBoolean("CameraMode.PlayersInCM.CanUseCommands") == (false)){
 						sender.sendMessage(ChatColor.GRAY + "To toggle a cmd: " + ChatColor.GRAY + "/camera config (addcmd/delcmd) </command>");
-						sender.sendMessage(ChatColor.GRAY + "Allowed Commands:" + ChatColor.AQUA + (cl.toString()));
+						sender.sendMessage(ChatColor.DARK_AQUA + "Allowed Commands:" + ChatColor.AQUA + (cl.toString()));
 					}
 				}else if (!sender.hasPermission("cameramode.config") && sender instanceof Player){
 					sender.sendMessage(ChatColor.RED + "You do not have permission.");
@@ -205,7 +205,7 @@ public class Commands implements CommandExecutor{
 								main.saveConfig();
 							}
 						}else if (args[2].equalsIgnoreCase("false")){
-							if (main.getConfig().getString("CameraMode.PlayersInCM.CanChangeWolrds").equalsIgnoreCase("false")){
+							if (main.getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds").equalsIgnoreCase("false")){
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already disabled!");
 							}else{
 								main.reloadConfig();
@@ -225,7 +225,7 @@ public class Commands implements CommandExecutor{
 							sender.sendMessage(ChatColor.GRAY + "Silly you... xP I'm already set to " + ChatColor.DARK_AQUA + main.getConfig().getInt("CameraMode.PvpTimer"));
 							}else{
 								main.reloadConfig();
-								main.getConfig().set("CameraMode.PlayersInCM.CanChangeWorlds", vall);
+								main.getConfig().set("CameraMode.PvpTimer", vall);
 								sender.sendMessage(ChatColor.GREEN + "Changes Made!");
 								main.saveConfig();
 							}
