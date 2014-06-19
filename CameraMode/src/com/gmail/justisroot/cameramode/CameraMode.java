@@ -34,14 +34,14 @@ public class CameraMode extends JavaPlugin {
 	public HashMap<String, Entity> mobs = new HashMap<String, Entity>();
 	public HashMap<String, Integer> pvpTimer = new HashMap<String, Integer>();
 	public HashMap<String, Float> falldistance = new HashMap<String, Float>();
-	public HashMap<UUID, Integer> timeLimit = new HashMap<UUID, Integer>();
 	public HashMap<UUID, Integer> coolDown = new HashMap<UUID, Integer>();
 	
 	//###### - Objects - ######//
 	
 
 	String reason = "You are in CameraMode!";
-	UpdateType biff = getConfig().getBoolean("CameraMode.Updates.AutoUpdate") ? Updater.UpdateType.DEFAULT : Updater.UpdateType.NO_DOWNLOAD;
+	UpdateType bifff;
+	UpdateType biff = this.getUpdater();
 
 	public ArrayList<String> commands = new ArrayList<String>();
 	
@@ -66,8 +66,10 @@ public class CameraMode extends JavaPlugin {
 			getCommand(commands).setExecutor(new Commands(this));
 		}
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been enabled"); 
+		if (biff != null) {
 		@SuppressWarnings("unused")
 		Updater updater = new Updater(this, 80542, getFile(), biff, true);
+		}
 	}
 	public void onDisable(){
 		reloadConfig();
@@ -95,5 +97,16 @@ public class CameraMode extends JavaPlugin {
 	        return false;
 	    }
 	    return true;
+	}
+	@SuppressWarnings("unused")
+	public UpdateType getUpdater(){
+		if (getConfig().getBoolean("CameraMode.Updates.AutoUpdate") == true){
+			UpdateType bifff = Updater.UpdateType.DEFAULT;
+		}else if (getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true){
+			UpdateType bifff = Updater.UpdateType.NO_DOWNLOAD;
+		}else{
+			UpdateType bifff = null;
+		}
+		return bifff;
 	}
 }

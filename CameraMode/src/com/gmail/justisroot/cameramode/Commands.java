@@ -22,7 +22,7 @@ public class Commands implements CommandExecutor{
 	}
 	
 	@SuppressWarnings({ "deprecation" })
-	public boolean onCommand(CommandSender sender, Command cmd, String StringLabel, String[] args) {
+	public boolean onCommand(final CommandSender sender, Command cmd, String StringLabel, String[] args) {
 	if (cmd.getName().equalsIgnoreCase("camera")) {
 		//######################//
 		//#####- Help Box -#####//
@@ -315,8 +315,8 @@ public class Commands implements CommandExecutor{
 			if (sender instanceof Player) {
 				if (sender.hasPermission("cameramode.cm")) {
 					final Player p = (Player) sender;
-					String target = ((Player) sender).getUniqueId().toString();
-					if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
+ /*Survival*/ 		final String target = ((Player) sender).getUniqueId().toString();
+   /*off*/			if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
 						((Player) sender).setAllowFlight(false);
 						Location loc = main.locations.get(p.getUniqueId().toString());
 						p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
@@ -337,8 +337,8 @@ public class Commands implements CommandExecutor{
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
 						}
-					}else if (main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
-						CameraMode pInst = main;
+  /*Creative*/		}else if (main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
+	/*off*/				CameraMode pInst = main;
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 						public void run() {
 						p.setVelocity(main.vel.get(p.getUniqueId().toString()));
@@ -358,7 +358,7 @@ public class Commands implements CommandExecutor{
 							pl.showPlayer(p);
 						}
 					}else{
-						if (!(main.pvpTimer.containsKey(((Player) sender).getUniqueId().toString()))) {
+      /*On*/			if (!(main.pvpTimer.containsKey(((Player) sender).getUniqueId().toString()))) {
 							main.flyplayers.add(target);
 							main.falldistance.put(p.getUniqueId().toString(), p.getFallDistance());
 							main.vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
@@ -375,6 +375,55 @@ public class Commands implements CommandExecutor{
 								for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 									pl.hidePlayer(p);
 								}
+							}
+							if (main.getConfig().getInt("CameraMode.CameraTimeLimit") > 0) {
+								sender.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
+								main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+								public void run() {
+									if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
+										((Player) sender).setAllowFlight(false);
+										Location loc = main.locations.get(p.getUniqueId().toString());
+										p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+										CameraMode pInst = main;
+										p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
+										pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+											public void run() {
+												p.setVelocity(main.vel.get(p.getUniqueId().toString()));
+											}
+										}, (long) 0.5);
+										main.flyplayers.remove(target);
+										((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
+										sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+										int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
+										((Player) sender).setFireTicks(Fireup);
+										int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
+										((Player) sender).setRemainingAir(air);
+										for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+											pl.showPlayer(p);
+										}
+									}else if (main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
+										CameraMode pInst = main;
+										pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+										public void run() {
+										p.setVelocity(main.vel.get(p.getUniqueId().toString()));
+										}
+										}, 1L);
+										main.flyplayers.remove(target);
+										p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
+										int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
+										((Player) sender).setFireTicks(Fireup);
+										int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
+										((Player) sender).setRemainingAir(air);
+										Location loc = main.locations.get(p.getUniqueId().toString());
+										p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+										sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+										((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
+										for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+											pl.showPlayer(p);
+										}
+									}
+								}
+								}, main.getConfig().getLong("CameraMode.CameraTimeLimit"));
 							}
 						}else{
 							sender.sendMessage(ChatColor.RED + "You cannot CameraMode while in battle! " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + main.pvpTimer.get(((Player) sender).getUniqueId().toString()).intValue() + ChatColor.DARK_GRAY + "]");
@@ -473,6 +522,58 @@ public class Commands implements CommandExecutor{
 										pl.hidePlayer(targetPlayer);
 									}
 								}
+								if (main.getConfig().getInt("CameraMode.CameraTimeLimit") > 0) {
+									sender.sendMessage(ChatColor.GREEN + "They have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
+									targetPlayer.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
+									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+									public void run() {
+										if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
+											targetPlayer.setAllowFlight(false);
+											Location loc = main.locations.get(superTarget);
+											targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+											CameraMode pInst = main;
+											targetPlayer.setFallDistance(main.falldistance.get(superTarget));
+											pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+												public void run() {
+													targetPlayer.setVelocity(main.vel.get(superTarget));
+												}
+											}, (long) 0.5);
+											main.flyplayers.remove(superTarget);
+											targetPlayer.addPotionEffects(main.effects.get(superTarget));
+											sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
+											targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+											int Fireup = main.fireticks.get(superTarget).intValue();
+											targetPlayer.setFireTicks(Fireup);
+											int air = main.breath.get(superTarget).intValue();
+											targetPlayer.setRemainingAir(air);
+											for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+												pl.showPlayer(targetPlayer);
+											}
+										}else if (main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
+											CameraMode pInst = main;
+											pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+											public void run() {
+											targetPlayer.setVelocity(main.vel.get(superTarget));
+											}
+											}, 1L);
+											main.flyplayers.remove(superTarget);
+											targetPlayer.setFallDistance(main.falldistance.get(superTarget));
+											int Fireup = main.fireticks.get(superTarget).intValue();
+											targetPlayer.setFireTicks(Fireup);
+											int air = main.breath.get(superTarget).intValue();
+											targetPlayer.setRemainingAir(air);
+											Location loc = main.locations.get(superTarget);
+											targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+											sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
+											targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+											targetPlayer.addPotionEffects(main.effects.get(superTarget));
+											for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+												pl.showPlayer(targetPlayer);
+											}
+										}
+									}
+									}, main.getConfig().getLong("CameraMode.CameraTimeLimit"));
+								}
 							}else{
 								sender.sendMessage(ChatColor.RED + args[0] + " is currently currently battling. " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + main.pvpTimer.get(superTarget).intValue() + ChatColor.DARK_GRAY + "]");
 							}
@@ -509,6 +610,59 @@ public class Commands implements CommandExecutor{
 								for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 									pl.hidePlayer(targetPlayer);
 								}
+							}
+
+							if (main.getConfig().getInt("CameraMode.CameraTimeLimit") > 0) {
+								sender.sendMessage(ChatColor.GREEN + "They have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
+								targetPlayer.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
+								main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+								public void run() {
+									if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
+										targetPlayer.setAllowFlight(false);
+										Location loc = main.locations.get(superTarget);
+										targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+										CameraMode pInst = main;
+										targetPlayer.setFallDistance(main.falldistance.get(superTarget));
+										pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+											public void run() {
+												targetPlayer.setVelocity(main.vel.get(superTarget));
+											}
+										}, (long) 0.5);
+										main.flyplayers.remove(superTarget);
+										targetPlayer.addPotionEffects(main.effects.get(superTarget));
+										sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
+										targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+										int Fireup = main.fireticks.get(superTarget).intValue();
+										targetPlayer.setFireTicks(Fireup);
+										int air = main.breath.get(superTarget).intValue();
+										targetPlayer.setRemainingAir(air);
+										for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+											pl.showPlayer(targetPlayer);
+										}
+									}else if (main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
+										CameraMode pInst = main;
+										pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+										public void run() {
+										targetPlayer.setVelocity(main.vel.get(superTarget));
+										}
+										}, 1L);
+										main.flyplayers.remove(superTarget);
+										targetPlayer.setFallDistance(main.falldistance.get(superTarget));
+										int Fireup = main.fireticks.get(superTarget).intValue();
+										targetPlayer.setFireTicks(Fireup);
+										int air = main.breath.get(superTarget).intValue();
+										targetPlayer.setRemainingAir(air);
+										Location loc = main.locations.get(superTarget);
+										targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+										sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
+										targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+										targetPlayer.addPotionEffects(main.effects.get(superTarget));
+										for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+											pl.showPlayer(targetPlayer);
+										}
+									}
+								}
+								}, main.getConfig().getLong("CameraMode.CameraTimeLimit"));
 							}
 						}else{
 							sender.sendMessage(ChatColor.RED + "This player is currently battling.");
