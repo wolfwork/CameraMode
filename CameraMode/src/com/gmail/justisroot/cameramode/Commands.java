@@ -572,7 +572,7 @@ public class Commands implements CommandExecutor{
 											}
 										}
 									}
-									}, main.getConfig().getLong("CameraMode.CameraTimeLimit"));
+									}, main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20);
 								}
 							}else{
 								sender.sendMessage(ChatColor.RED + args[0] + " is currently currently battling. " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + main.pvpTimer.get(superTarget).intValue() + ChatColor.DARK_GRAY + "]");
@@ -662,7 +662,7 @@ public class Commands implements CommandExecutor{
 										}
 									}
 								}
-								}, main.getConfig().getLong("CameraMode.CameraTimeLimit"));
+								}, main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20);
 							}
 						}else{
 							sender.sendMessage(ChatColor.RED + "This player is currently battling.");
