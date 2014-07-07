@@ -423,7 +423,7 @@ public class Commands implements CommandExecutor{
 										}
 									}
 								}
-								}, main.getConfig().getLong("CameraMode.CameraTimeLimit"));
+								}, main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20);
 							}
 						}else{
 							sender.sendMessage(ChatColor.RED + "You cannot CameraMode while in battle! " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + main.pvpTimer.get(((Player) sender).getUniqueId().toString()).intValue() + ChatColor.DARK_GRAY + "]");
