@@ -65,6 +65,7 @@ public class CameraMode extends JavaPlugin {
 		for (String commands : this.commands){
 			getCommand(commands).setExecutor(new Commands(this));
 		}
+		
 		getUpdater();
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been enabled"); 
 		if (biff != null) {
