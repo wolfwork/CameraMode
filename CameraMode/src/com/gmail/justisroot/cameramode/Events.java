@@ -56,6 +56,7 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import com.gmail.justisroot.cameramode.Updater.UpdateResult;
 
+
 public class Events implements Listener {
 
 	CameraMode main;

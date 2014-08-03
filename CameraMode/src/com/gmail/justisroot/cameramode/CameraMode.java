@@ -42,6 +42,7 @@ public class CameraMode extends JavaPlugin {
 	String reason = "You are in CameraMode!";
 	UpdateType bifff;
 
+
 	public ArrayList<String> commands = new ArrayList<String>();
 	
 	
@@ -49,6 +50,7 @@ public class CameraMode extends JavaPlugin {
 	//#########- Start - #########//
 	//############################//
 	
+	@SuppressWarnings("unused")
 	public void onEnable() {
 		getConfig().options().copyHeader(true);
 		getConfig().options().copyDefaults(true);
@@ -65,9 +67,11 @@ public class CameraMode extends JavaPlugin {
 			getCommand(commands).setExecutor(new Commands(this));
 		}
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been enabled"); 
-		if (this.getUpdater() != null) {
-		@SuppressWarnings("unused")
-		Updater updater = new Updater(this, 80542, getFile(), this.getUpdater(), true);
+		if (getConfig().getBoolean("CameraMode.Updates.AutoUpdate") == true){
+			Updater updater = new Updater(this, 80542, getFile(), Updater.UpdateType.DEFAULT, true);
+		}else if (getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true){
+			Updater updater = new Updater(this, 80542, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+		}else{
 		}
 	}
 	public void onDisable(){
@@ -96,15 +100,5 @@ public class CameraMode extends JavaPlugin {
 	        return false;
 	    }
 	    return true;
-	}
-	public UpdateType getUpdater(){
-		if (getConfig().getBoolean("CameraMode.Updates.AutoUpdate") == true){
-			bifff = Updater.UpdateType.DEFAULT;
-		}else if (getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true){
-			bifff = Updater.UpdateType.NO_DOWNLOAD;
-		}else{
-			bifff = null;
-		}
-		return bifff;
 	}
 }
