@@ -59,17 +59,14 @@ import org.bukkit.projectiles.ProjectileSource;
 public class Events implements Listener {
 
 	CameraMode main;
-	Updater updater;
+	
 	public int ID;
 	String reason = "You are in CameraMode!";
 
 	public Events(CameraMode plugin){
 		this.main = plugin;
 	}
-	public Events(Updater plugin){
-		this.updater = plugin;
-	}
-
+	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player) {
@@ -131,12 +128,10 @@ public class Events implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
 		if (main.getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true) {
-			 if (updater.getResult().toString().equals("Updater.UpdateResult.UPDATE_AVAILABLE")) {
-				 if (updater.getLatestType().toString().equalsIgnoreCase("release")) {
-					 if (e.getPlayer().hasPermission("cameramode.update")){
-						 e.getPlayer().sendMessage(ChatColor.DARK_AQUA + "CameraMode: " + ChatColor.AQUA + "New Update Available!");
-						 e.getPlayer().sendMessage(ChatColor.GRAY + updater.getLatestFileLink().toString());
-					 }
+			if (!(main.updates.isEmpty())) {
+				 if (e.getPlayer().hasPermission("cameramode.update")){
+					 e.getPlayer().sendMessage(ChatColor.DARK_AQUA + "CameraMode: " + ChatColor.AQUA + "New Update Available!");
+					 e.getPlayer().sendMessage(ChatColor.GRAY + main.updates.get(1));
 				 }
 			 }
 		}

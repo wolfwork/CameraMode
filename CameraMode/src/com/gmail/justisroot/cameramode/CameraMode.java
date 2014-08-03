@@ -34,6 +34,7 @@ public class CameraMode extends JavaPlugin {
 	public HashMap<String, Integer> pvpTimer = new HashMap<String, Integer>();
 	public HashMap<String, Float> falldistance = new HashMap<String, Float>();
 	public HashMap<UUID, Integer> coolDown = new HashMap<UUID, Integer>();
+	public List<String> updates;
 	
 	//###### - Objects - ######//
 	
@@ -69,6 +70,9 @@ public class CameraMode extends JavaPlugin {
 			Updater updater = new Updater(this, 80542, getFile(), Updater.UpdateType.DEFAULT, true);
 		}else if (getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true){
 			Updater updater = new Updater(this, 80542, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+			if (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE) && updater.getLatestType().toString().equalsIgnoreCase("release")) {
+				updates.add(updater.getLatestFileLink().toString());
+			}
 		}else{
 		}
 	}
@@ -76,7 +80,7 @@ public class CameraMode extends JavaPlugin {
 		reloadConfig();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been disabled");
-		
+		updates.clear();
 	}
 	
 	//#############################//
