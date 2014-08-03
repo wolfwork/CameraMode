@@ -70,7 +70,7 @@ public class CameraMode extends JavaPlugin {
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been enabled"); 
 		if (biff != null) {
 		@SuppressWarnings("unused")
-		Updater updater = new Updater(this, 80542, getFile(), biff, true);
+		Updater updater = new Updater(this, 80542, getFile(), bifff, true);
 		}
 	}
 	public void onDisable(){
