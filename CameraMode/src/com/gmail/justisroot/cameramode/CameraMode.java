@@ -14,7 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
-import com.gmail.justisroot.cameramode.Updater.UpdateType;
 
 public class CameraMode extends JavaPlugin {
 	
@@ -40,7 +39,6 @@ public class CameraMode extends JavaPlugin {
 	
 
 	String reason = "You are in CameraMode!";
-	UpdateType bifff;
 
 
 	public ArrayList<String> commands = new ArrayList<String>();
