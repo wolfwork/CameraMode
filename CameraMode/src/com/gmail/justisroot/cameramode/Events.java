@@ -131,7 +131,7 @@ public class Events implements Listener {
 			if (!(main.updates.isEmpty())) {
 				 if (e.getPlayer().hasPermission("cameramode.update")){
 					 e.getPlayer().sendMessage(ChatColor.DARK_AQUA + "CameraMode: " + ChatColor.AQUA + "New Update Available!");
-					 e.getPlayer().sendMessage(ChatColor.GRAY + main.updates.toString());
+					 e.getPlayer().sendMessage(ChatColor.GRAY + "test");
 				 }
 			 }
 		}
