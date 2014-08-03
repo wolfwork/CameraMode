@@ -128,8 +128,8 @@ public class Events implements Listener {
 	}
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
-		if (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE)) {
-			if (updater.getLatestType().toString().equalsIgnoreCase("release") && (main.getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true)) {
+		if ((main.getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true)) {
+			if (updater.getLatestType().toString().equalsIgnoreCase("release") && updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE)) {
 				if (e.getPlayer().hasPermission("cameramode.update")){
 					e.getPlayer().sendMessage(ChatColor.DARK_AQUA + "CameraMode: " + ChatColor.AQUA + "New Update Available!");
 					e.getPlayer().sendMessage(ChatColor.GRAY + updater.getLatestFileLink().toString());
