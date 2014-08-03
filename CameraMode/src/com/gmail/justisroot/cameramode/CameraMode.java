@@ -41,7 +41,6 @@ public class CameraMode extends JavaPlugin {
 
 	String reason = "You are in CameraMode!";
 	UpdateType bifff;
-	UpdateType biff = this.getUpdater();
 
 	public ArrayList<String> commands = new ArrayList<String>();
 	
@@ -66,9 +65,9 @@ public class CameraMode extends JavaPlugin {
 			getCommand(commands).setExecutor(new Commands(this));
 		}
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been enabled"); 
-		if (biff != null) {
+		if (this.getUpdater() != null) {
 		@SuppressWarnings("unused")
-		Updater updater = new Updater(this, 80542, getFile(), biff, true);
+		Updater updater = new Updater(this, 80542, getFile(), this.getUpdater(), true);
 		}
 	}
 	public void onDisable(){
