@@ -54,7 +54,6 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
-import com.gmail.justisroot.cameramode.Updater.UpdateResult;
 
 
 public class Events implements Listener {
@@ -132,7 +131,7 @@ public class Events implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
 		if ((main.getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true)) {
-			 if (updater.getResult().equals(UpdateResult.UPDATE_AVAILABLE)) {
+			 if (updater.getResult().toString().equals("UPDATE_AVAILABLE")) {
 				 if (updater.getLatestType().toString().equalsIgnoreCase("release")) {
 					 if (e.getPlayer().hasPermission("cameramode.update")){
 						 e.getPlayer().sendMessage(ChatColor.DARK_AQUA + "CameraMode: " + ChatColor.AQUA + "New Update Available!");
