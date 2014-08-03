@@ -34,7 +34,7 @@ public class CameraMode extends JavaPlugin {
 	public HashMap<String, Integer> pvpTimer = new HashMap<String, Integer>();
 	public HashMap<String, Float> falldistance = new HashMap<String, Float>();
 	public HashMap<UUID, Integer> coolDown = new HashMap<UUID, Integer>();
-	public List<String> updates;
+	public ArrayList<String> updates = new ArrayList<String>();
 	
 	//###### - Objects - ######//
 	
