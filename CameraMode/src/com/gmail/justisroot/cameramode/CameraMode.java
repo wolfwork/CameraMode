@@ -70,7 +70,7 @@ public class CameraMode extends JavaPlugin {
 		getLogger().info(pdfFile.getName() + " v" + pdfFile.getVersion() + " has been enabled"); 
 		if (biff != null) {
 		@SuppressWarnings("unused")
-		Updater updater = new Updater(this, 80542, getFile(), bifff, true);
+		Updater updater = new Updater(this, 80542, getFile(), biff, true);
 		}
 	}
 	public void onDisable(){
@@ -100,14 +100,13 @@ public class CameraMode extends JavaPlugin {
 	    }
 	    return true;
 	}
-	@SuppressWarnings("unused")
 	public UpdateType getUpdater(){
 		if (getConfig().getBoolean("CameraMode.Updates.AutoUpdate") == true){
-			UpdateType bifff = Updater.UpdateType.DEFAULT;
+			bifff = Updater.UpdateType.DEFAULT;
 		}else if (getConfig().getBoolean("CameraMode.Updates.NotifyOps") == true){
-			UpdateType bifff = Updater.UpdateType.NO_DOWNLOAD;
+			bifff = Updater.UpdateType.NO_DOWNLOAD;
 		}else{
-			UpdateType bifff = null;
+			bifff = null;
 		}
 		return bifff;
 	}
