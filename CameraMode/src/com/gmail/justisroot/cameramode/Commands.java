@@ -390,15 +390,7 @@ int ID;
 					}else{
 						if (!(main.coolDown.containsKey(((Player) sender).getUniqueId()))) {
 	      /*On*/			if (!(main.pvpTimer.containsKey(((Player) sender).getUniqueId().toString()))) {
-	    	  				if(((Player)sender).getGameMode() == GameMode.SURVIVAL){
-	    	  					((Player)sender).setGameMode(GameMode.CREATIVE);
-								main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-									public void run() {
-										((Player)sender).setGameMode(GameMode.SURVIVAL);
-										main.flyplayers.add(target);
-									}
-								},2);
-	    	  				}
+								main.flyplayers.add(target);
 								main.falldistance.put(p.getUniqueId().toString(), p.getFallDistance());
 								main.vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
 								main.locations.put(p.getUniqueId().toString(), p.getLocation());
@@ -587,15 +579,7 @@ int ID;
 						}else{
 							if (!(main.coolDown.containsKey(targetPlayer))){
 								if (!(main.pvpTimer.containsKey(superTarget))){
-			    	  				if(targetPlayer.getGameMode() == GameMode.SURVIVAL){
-			    	  					targetPlayer.setGameMode(GameMode.CREATIVE);
-										main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-											public void run() {
-												targetPlayer.setGameMode(GameMode.SURVIVAL);
-												main.flyplayers.add(superTarget);
-											}
-										},2);
-			    	  				}
+								main.flyplayers.add(superTarget);
 								main.locations.put(superTarget, targetPlayer.getLocation());
 								targetPlayer.setAllowFlight(true);
 								main.fireticks.put(superTarget, targetPlayer.getFireTicks());
@@ -709,15 +693,7 @@ int ID;
 					if (!(main.flyplayers.contains(superTarget))){
 						if (!(main.coolDown.containsKey(targetPlayer))){
 							if (!(main.pvpTimer.containsKey(superTarget))){
-		    	  				if(targetPlayer.getGameMode() == GameMode.SURVIVAL){
-		    	  					targetPlayer.setGameMode(GameMode.CREATIVE);
-									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-										public void run() {
-											targetPlayer.setGameMode(GameMode.SURVIVAL);
-											main.flyplayers.add(superTarget);
-										}
-									},2);
-		    	  				}
+								main.flyplayers.add(superTarget);
 								main.locations.put(superTarget, targetPlayer.getLocation());
 								targetPlayer.setAllowFlight(true);
 								main.fireticks.put(superTarget, targetPlayer.getFireTicks());
