@@ -73,7 +73,6 @@ public class CameraMode extends JavaPlugin {
 			if (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE) && updater.getLatestType().toString().equalsIgnoreCase("release")) {
 				updates.add(updater.getLatestFileLink().toString());
 			}
-		}else{
 		}
 	}
 	public void onDisable(){

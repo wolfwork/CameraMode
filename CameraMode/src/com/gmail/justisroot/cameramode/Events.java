@@ -60,7 +60,7 @@ public class Events implements Listener {
 
 	CameraMode main;
 	
-	public int ID;
+	int ID;
 	String reason = "You are in CameraMode!";
 
 	public Events(CameraMode plugin){
