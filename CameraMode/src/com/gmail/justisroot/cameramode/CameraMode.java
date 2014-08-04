@@ -72,6 +72,7 @@ public class CameraMode extends JavaPlugin {
 			Updater updater = new Updater(this, 80542, getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
 			if (updater.getResult().equals(Updater.UpdateResult.UPDATE_AVAILABLE) && updater.getLatestType().toString().equalsIgnoreCase("release")) {
 				updates.add(updater.getLatestFileLink().toString());
+				getLogger().info("New Update Available At " + updates.get(0)) ;
 			}
 		}
 	}
