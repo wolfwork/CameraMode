@@ -395,10 +395,10 @@ int ID;
 								main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 									public void run() {
 										((Player)sender).setGameMode(GameMode.SURVIVAL);
+										main.flyplayers.add(target);
 									}
-								},3);
+								},2);
 	    	  				}
-								main.flyplayers.add(target);
 								main.falldistance.put(p.getUniqueId().toString(), p.getFallDistance());
 								main.vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
 								main.locations.put(p.getUniqueId().toString(), p.getLocation());
@@ -592,10 +592,10 @@ int ID;
 										main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 											public void run() {
 												targetPlayer.setGameMode(GameMode.SURVIVAL);
+												main.flyplayers.add(superTarget);
 											}
-										},3);
+										},2);
 			    	  				}
-								main.flyplayers.add(superTarget);
 								main.locations.put(superTarget, targetPlayer.getLocation());
 								targetPlayer.setAllowFlight(true);
 								main.fireticks.put(superTarget, targetPlayer.getFireTicks());
@@ -714,10 +714,10 @@ int ID;
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 										public void run() {
 											targetPlayer.setGameMode(GameMode.SURVIVAL);
+											main.flyplayers.add(superTarget);
 										}
-									},3);
+									},2);
 		    	  				}
-								main.flyplayers.add(superTarget);
 								main.locations.put(superTarget, targetPlayer.getLocation());
 								targetPlayer.setAllowFlight(true);
 								main.fireticks.put(superTarget, targetPlayer.getFireTicks());
