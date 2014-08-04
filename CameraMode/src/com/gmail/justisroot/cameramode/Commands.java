@@ -411,21 +411,22 @@ int ID;
 									sender.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 									public void run() {
-										main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
-										ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
-											public void run() {
-													main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
-													if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
-														Bukkit.getScheduler().cancelTask(ID);
-													}
-											}
-										}, 0,20);
-										main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-											public void run() {
-												main.coolDown.remove(((Player) sender).getUniqueId());
-											}
-										},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
-										
+										if(main.flyplayers.contains(((Player) sender).getUniqueId())) {
+											main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
+											ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+												public void run() {
+														main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
+														if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
+															Bukkit.getScheduler().cancelTask(ID);
+														}
+												}
+											}, 0,20);
+											main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+												public void run() {
+													main.coolDown.remove(((Player) sender).getUniqueId());
+												}
+											},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
+										}
 										if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
 											((Player) sender).setAllowFlight(false);
 											Location loc = main.locations.get(p.getUniqueId().toString());
@@ -607,20 +608,22 @@ int ID;
 										targetPlayer.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 										main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 										public void run() {
-											main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
-											ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
-												public void run() {
-														main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-														if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
-															Bukkit.getScheduler().cancelTask(ID);
-														}
-												}
-											}, 0,20);
-											main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-												public void run() {
-													main.coolDown.remove(targetPlayer.getUniqueId());
-												}
-											},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
+											if(main.flyplayers.contains(targetPlayer.getUniqueId())) {
+												main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
+												ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+													public void run() {
+															main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+															if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
+																Bukkit.getScheduler().cancelTask(ID);
+															}
+													}
+												}, 0,20);
+												main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+													public void run() {
+														main.coolDown.remove(targetPlayer.getUniqueId());
+													}
+												},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
+											}
 											if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
 												targetPlayer.setAllowFlight(false);
 												Location loc = main.locations.get(superTarget);
@@ -715,21 +718,22 @@ int ID;
 									targetPlayer.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 									public void run() {
-										main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
-										ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
-											public void run() {
-													main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-													if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
-														Bukkit.getScheduler().cancelTask(ID);
-													}
-											}
-										}, 0,20);
-										main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-											public void run() {
-												main.coolDown.remove(targetPlayer.getUniqueId());
-											}
-										},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
-										
+										if(main.flyplayers.contains(targetPlayer.getUniqueId())) {
+											main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
+											ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+												public void run() {
+														main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+														if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
+															Bukkit.getScheduler().cancelTask(ID);
+														}
+												}
+											}, 0,20);
+											main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+												public void run() {
+													main.coolDown.remove(targetPlayer.getUniqueId());
+												}
+											},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
+										}
 										if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
 											targetPlayer.setAllowFlight(false);
 											Location loc = main.locations.get(superTarget);
