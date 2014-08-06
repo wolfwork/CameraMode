@@ -61,6 +61,7 @@ public class Events implements Listener {
 	CameraMode main;
 	
 	int ID;
+	int IDS;
 	String reason = "You are in CameraMode!";
 
 	public Events(CameraMode plugin){
@@ -106,7 +107,7 @@ public class Events implements Listener {
 					if (e.getDamager() instanceof Zombie || e.getEntity() instanceof Slime || e.getEntity() instanceof Player || e.getEntity() instanceof Skeleton || e.getEntity() instanceof Creeper || e.getEntity() instanceof Spider || e.getEntity() instanceof Witch || e.getEntity() instanceof Wolf || e.getEntity() instanceof Blaze || e.getEntity() instanceof Ghast || e.getEntity() instanceof MagmaCube || e.getEntity() instanceof Arrow || e.getEntity() instanceof CaveSpider || e.getEntity() instanceof EnderDragon | e.getEntity() instanceof PigZombie || e.getEntity() instanceof Silverfish || e.getEntity() instanceof Fireball || e.getEntity() instanceof WitherSkull || e.getEntity() instanceof Wither || e.getEntity() instanceof IronGolem || e.getEntity() instanceof Giant){
 						if (!main.pvpTimer.containsKey(entiti.getUniqueId().toString())){
 							main.pvpTimer.put(e.getEntity().getUniqueId().toString(), main.getConfig().getInt("CameraMode.PvpTimer") + 1);
-							ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+							IDS = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
 										main.pvpTimer.put(entiti.getUniqueId().toString(), main.pvpTimer.get(entiti.getUniqueId().toString()) - 1);
 										if (main.pvpTimer.get(entiti.getUniqueId().toString()) == 1){
