@@ -36,6 +36,8 @@ public class CameraMode extends JavaPlugin {
 	 HashMap<UUID, Integer> coolDown = new HashMap<UUID, Integer>();
 	 ArrayList<String> updates = new ArrayList<String>();
 	 HashMap<UUID, Entity> enderman = new HashMap<UUID, Entity>();
+	 ArrayList<UUID> looper = new ArrayList<UUID>();
+	 ArrayList<UUID> loopers = new ArrayList<UUID>();
 	//###### - Objects - ######//
 	
 
