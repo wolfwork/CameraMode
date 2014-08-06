@@ -92,7 +92,7 @@ public class Events implements Listener {
 							ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
 										main.pvpTimer.put(player.getUniqueId().toString(), main.pvpTimer.get(player.getUniqueId().toString()) - 1);
-										if (main.pvpTimer.get(player.getUniqueId().toString()) == 1){
+										if (main.pvpTimer.get(player.getUniqueId().toString()) == 0){
 											Bukkit.getScheduler().cancelTask(ID);
 											main.pvpTimer.remove(player.getUniqueId().toString());
 										}
@@ -124,7 +124,7 @@ public class Events implements Listener {
 							IDS = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
 										main.pvpTimer.put(entiti.getUniqueId().toString(), main.pvpTimer.get(entiti.getUniqueId().toString()) - 1);
-										if (main.pvpTimer.get(entiti.getUniqueId().toString()) == 1){
+										if (main.pvpTimer.get(entiti.getUniqueId().toString()) == 0){
 											Bukkit.getScheduler().cancelTask(IDS);
 											main.pvpTimer.remove(entiti.getUniqueId().toString());
 										}
