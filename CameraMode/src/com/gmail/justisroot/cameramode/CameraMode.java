@@ -21,20 +21,20 @@ public class CameraMode extends JavaPlugin {
 	//######- Data Store -######//
 	//##########################//
 	
-	public ArrayList<String> flyplayers = new ArrayList<String>();
-	public HashMap<String, Integer> fireticks = new HashMap<String, Integer>();
-	public HashMap<String, Integer> breath = new HashMap<String, Integer>();
-	public ArrayList<String> pause = new ArrayList<String>();
-	public List<String> allowedcmds = getConfig().getStringList("CameraMode.PlayersInCM.AllowedCommands");
-	public HashMap<String, Location> locations = new HashMap<String, Location>();
-	public ArrayList<String> tre = new ArrayList<String>();
-	public HashMap<String, List<PotionEffect>> effects = new HashMap<String, List<PotionEffect>>();
-	public HashMap<String, Vector> vel = new HashMap<String, Vector>();
-	public HashMap<String, Entity> mobs = new HashMap<String, Entity>();
-	public HashMap<String, Integer> pvpTimer = new HashMap<String, Integer>();
-	public HashMap<String, Float> falldistance = new HashMap<String, Float>();
-	public HashMap<UUID, Integer> coolDown = new HashMap<UUID, Integer>();
-	public ArrayList<String> updates = new ArrayList<String>();
+    ArrayList<String> flyplayers = new ArrayList<String>();
+	 HashMap<String, Integer> fireticks = new HashMap<String, Integer>();
+	 HashMap<String, Integer> breath = new HashMap<String, Integer>();
+	 ArrayList<String> pause = new ArrayList<String>();
+	 List<String> allowedcmds = getConfig().getStringList("CameraMode.PlayersInCM.AllowedCommands");
+	 HashMap<String, Location> locations = new HashMap<String, Location>();
+	 ArrayList<String> tre = new ArrayList<String>();
+	 HashMap<String, List<PotionEffect>> effects = new HashMap<String, List<PotionEffect>>();
+	 HashMap<String, Vector> vel = new HashMap<String, Vector>();
+	 HashMap<String, Entity> mobs = new HashMap<String, Entity>();
+	 HashMap<String, Integer> pvpTimer = new HashMap<String, Integer>();
+	 HashMap<String, Float> falldistance = new HashMap<String, Float>();
+	 HashMap<UUID, Integer> coolDown = new HashMap<UUID, Integer>();
+	 ArrayList<String> updates = new ArrayList<String>();
 	
 	//###### - Objects - ######//
 	

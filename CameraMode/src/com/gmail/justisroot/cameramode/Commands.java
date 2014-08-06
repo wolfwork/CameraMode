@@ -9,6 +9,10 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
@@ -407,6 +411,18 @@ int ID;
 										pl.hidePlayer(p);
 									}
 								}
+								for(Entity mob : ((Player)sender).getNearbyEntities(36, 36, 36)) {
+									if(mob.getType().equals(EntityType.BLAZE) || mob.getType().equals( EntityType.CAVE_SPIDER )|| mob.getType().equals(   EntityType.CREEPER) || mob.getType().equals(   EntityType.ENDERMAN )|| mob.getType().equals(   EntityType.GIANT) || mob.getType().equals(   EntityType.IRON_GOLEM )|| mob.getType().equals(   EntityType.PIG_ZOMBIE )|| mob.getType().equals(   EntityType.PLAYER )|| mob.getType().equals(   EntityType.SILVERFISH) || mob.getType().equals(   EntityType.SKELETON) || mob.getType().equals(   EntityType.SPIDER )|| mob.getType().equals(   EntityType.WITCH )|| mob.getType().equals(   EntityType.WITHER) || mob.getType().equals(   EntityType.ZOMBIE) || mob.getType().equals(   EntityType.WOLF)){
+										if(mob.getType().equals( EntityType.PLAYER)){
+											//* Potential Stuff Here*//
+										}else{
+											Creature mobs = (Creature) mob;
+											if(mobs.getTarget() != null && mobs.getTarget().equals((LivingEntity)sender)){
+												mobs.setTarget(null);
+											}
+										}
+									}
+								}	
 								if (main.getConfig().getInt("CameraMode.CameraTimeLimit") > 0) {
 									sender.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
@@ -498,7 +514,7 @@ int ID;
 							Location loc = main.locations.get(superTarget);
 							targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
 							CameraMode pInst = main;
-							pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+		/*OFF*/				pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 							public void run() {
 							targetPlayer.setVelocity(main.vel.get(superTarget));
 							}
@@ -546,7 +562,7 @@ int ID;
 							int Fireup = main.fireticks.get(superTarget).intValue();
 							(targetPlayer).setFireTicks(Fireup);
 							int air = main.breath.get(superTarget).intValue();
-							(targetPlayer).setRemainingAir(air);
+	/*OFF*/					(targetPlayer).setRemainingAir(air);
 							targetPlayer.setFallDistance(main.falldistance.get(targetPlayer.getUniqueId().toString()));
 							Location loc = main.locations.get(superTarget);
 							targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
@@ -583,7 +599,7 @@ int ID;
 								main.locations.put(superTarget, targetPlayer.getLocation());
 								targetPlayer.setAllowFlight(true);
 								main.fireticks.put(superTarget, targetPlayer.getFireTicks());
-								targetPlayer.setFireTicks(0);
+		/*ON*/					targetPlayer.setFireTicks(0);
 								main.vel.put(superTarget, targetPlayer.getVelocity());
 								main.breath.put(superTarget, targetPlayer.getRemainingAir());
 								main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
@@ -700,7 +716,7 @@ int ID;
 								targetPlayer.setFireTicks(0);
 								main.falldistance.put(targetPlayer.getUniqueId().toString(), targetPlayer.getFallDistance());
 								main.vel.put(superTarget, targetPlayer.getVelocity());
-								main.breath.put(superTarget, targetPlayer.getRemainingAir());
+	/*ON*/						main.breath.put(superTarget, targetPlayer.getRemainingAir());
 								main.effects.put(superTarget, (List<PotionEffect>) targetPlayer.getActivePotionEffects());
 								for (PotionEffect effect : targetPlayer.getActivePotionEffects())
 							        targetPlayer.removePotionEffect(effect.getType());
@@ -791,7 +807,7 @@ int ID;
 						targetPlayer.setAllowFlight(false);
 						Location loc = main.locations.get(superTarget);
 						targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-						targetPlayer.setVelocity(main.vel.get(superTarget));
+	/*OFF*/				targetPlayer.setVelocity(main.vel.get(superTarget));
 						CameraMode pInst = main;
 						targetPlayer.setFallDistance(main.falldistance.get(targetPlayer.getUniqueId().toString()));
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
@@ -835,7 +851,7 @@ int ID;
 						}, 5L);
 						int Fireup = main.fireticks.get(superTarget).intValue();
 						(targetPlayer).setFireTicks(Fireup);
-						int air = main.breath.get(superTarget).intValue();
+	/*OFF*/				int air = main.breath.get(superTarget).intValue();
 						(targetPlayer).setRemainingAir(air);
 						Location loc = main.locations.get(superTarget);
 						targetPlayer.setFallDistance(main.falldistance.get(targetPlayer.getUniqueId().toString()));
