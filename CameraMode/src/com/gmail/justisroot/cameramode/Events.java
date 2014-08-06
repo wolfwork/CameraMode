@@ -78,7 +78,7 @@ public class Events implements Listener {
 			}else{
 				if (main.getConfig().getLong("CameraMode.PvpTimer") != 0){
 					if (e.getEntity() instanceof Zombie || e.getEntity() instanceof Slime || e.getEntity() instanceof Player || e.getEntity() instanceof Skeleton || e.getEntity() instanceof Creeper || e.getEntity() instanceof Spider || e.getEntity() instanceof Witch || e.getEntity() instanceof Wolf || e.getEntity() instanceof Blaze || e.getEntity() instanceof Ghast || e.getEntity() instanceof MagmaCube || e.getEntity() instanceof Arrow || e.getEntity() instanceof CaveSpider || e.getEntity() instanceof EnderDragon | e.getEntity() instanceof PigZombie || e.getEntity() instanceof Silverfish || e.getEntity() instanceof Fireball || e.getEntity() instanceof WitherSkull || e.getEntity() instanceof Wither || e.getEntity() instanceof IronGolem || e.getEntity() instanceof Giant){
-						if (!main.pvpTimer.containsKey(player.getUniqueId().toString())){
+						//if (!main.pvpTimer.containsKey(player.getUniqueId().toString()))
 							main.pvpTimer.put(e.getDamager().getUniqueId().toString(), main.getConfig().getInt("CameraMode.PvpTimer") +1);
 							ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
@@ -93,7 +93,7 @@ public class Events implements Listener {
 									main.pvpTimer.remove(player.getUniqueId().toString());
 								}
 							},20 * main.getConfig().getLong("CameraMode.PvpTimer"));
-						}
+						
 					}
 				}
 			}
@@ -105,7 +105,7 @@ public class Events implements Listener {
 			}else{
 				if (main.getConfig().getLong("CameraMode.PvpTimer") != 0){
 					if (e.getDamager() instanceof Zombie || e.getEntity() instanceof Slime || e.getEntity() instanceof Player || e.getEntity() instanceof Skeleton || e.getEntity() instanceof Creeper || e.getEntity() instanceof Spider || e.getEntity() instanceof Witch || e.getEntity() instanceof Wolf || e.getEntity() instanceof Blaze || e.getEntity() instanceof Ghast || e.getEntity() instanceof MagmaCube || e.getEntity() instanceof Arrow || e.getEntity() instanceof CaveSpider || e.getEntity() instanceof EnderDragon | e.getEntity() instanceof PigZombie || e.getEntity() instanceof Silverfish || e.getEntity() instanceof Fireball || e.getEntity() instanceof WitherSkull || e.getEntity() instanceof Wither || e.getEntity() instanceof IronGolem || e.getEntity() instanceof Giant){
-						if (!main.pvpTimer.containsKey(entiti.getUniqueId().toString())){
+						//if (!main.pvpTimer.containsKey(entiti.getUniqueId().toString()))
 							main.pvpTimer.put(e.getEntity().getUniqueId().toString(), main.getConfig().getInt("CameraMode.PvpTimer") + 1);
 							IDS = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
@@ -120,7 +120,7 @@ public class Events implements Listener {
 									main.pvpTimer.remove(entiti.getUniqueId().toString());
 								}
 							},20 * main.getConfig().getLong("CameraMode.PvpTimer"));
-						}
+						
 					}
 				}
 			}
