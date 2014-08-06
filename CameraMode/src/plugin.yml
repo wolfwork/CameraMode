@@ -29,7 +29,7 @@ permissions:
         default: op
     cameramode.cm:
         description: Gives access to cameramode
-        default: false
+        default: true
     cameramode.fly:
         description: Allows players to survival fly even when not in camera mode. (only necessary if they have safefly.fly)
         default: op
