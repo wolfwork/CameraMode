@@ -413,12 +413,15 @@ int ID;
 								}
 								for(Entity mob : ((Player)sender).getNearbyEntities(36, 36, 36)) {
 									if(mob.getType().equals(EntityType.BLAZE) || mob.getType().equals( EntityType.CAVE_SPIDER )|| mob.getType().equals(   EntityType.CREEPER) || mob.getType().equals(   EntityType.ENDERMAN )|| mob.getType().equals(   EntityType.GIANT) || mob.getType().equals(   EntityType.IRON_GOLEM )|| mob.getType().equals(   EntityType.PIG_ZOMBIE )|| mob.getType().equals(   EntityType.PLAYER )|| mob.getType().equals(   EntityType.SILVERFISH) || mob.getType().equals(   EntityType.SKELETON) || mob.getType().equals(   EntityType.SPIDER )|| mob.getType().equals(   EntityType.WITCH )|| mob.getType().equals(   EntityType.WITHER) || mob.getType().equals(   EntityType.ZOMBIE) || mob.getType().equals(   EntityType.WOLF)){
-										if(mob.getType().equals( EntityType.PLAYER)){
+										if(mob.getType().equals(EntityType.PLAYER)){
 											//* Potential Stuff Here*//
 										}else{
 											Creature mobs = (Creature) mob;
 											if(mobs.getTarget() != null && mobs.getTarget().equals((LivingEntity)sender)){
 												mobs.setTarget(null);
+												if(mob.getType().equals(EntityType.ENDERMAN)){
+													main.enderman.put(((Player) sender).getUniqueId(), mob);
+												}
 											}
 										}
 									}
@@ -606,6 +609,21 @@ int ID;
 								for (PotionEffect effect : targetPlayer.getActivePotionEffects()){
 							        targetPlayer.removePotionEffect(effect.getType());
 								}
+								for(Entity mob : targetPlayer.getNearbyEntities(36, 36, 36)) {
+									if(mob.getType().equals(EntityType.BLAZE) || mob.getType().equals( EntityType.CAVE_SPIDER )|| mob.getType().equals(   EntityType.CREEPER) || mob.getType().equals(   EntityType.ENDERMAN )|| mob.getType().equals(   EntityType.GIANT) || mob.getType().equals(   EntityType.IRON_GOLEM )|| mob.getType().equals(   EntityType.PIG_ZOMBIE )|| mob.getType().equals(   EntityType.PLAYER )|| mob.getType().equals(   EntityType.SILVERFISH) || mob.getType().equals(   EntityType.SKELETON) || mob.getType().equals(   EntityType.SPIDER )|| mob.getType().equals(   EntityType.WITCH )|| mob.getType().equals(   EntityType.WITHER) || mob.getType().equals(   EntityType.ZOMBIE) || mob.getType().equals(   EntityType.WOLF)){
+										if(mob.getType().equals(EntityType.PLAYER)){
+											//* Potential Stuff Here*//
+										}else{
+											Creature mobs = (Creature) mob;
+											if(mobs.getTarget() != null && mobs.getTarget().equals((LivingEntity)targetPlayer)){
+												mobs.setTarget(null);
+												if(mob.getType().equals(EntityType.ENDERMAN)){
+													//main.enderman.put(targetPlayer.getUniqueId(), mob);
+												}
+											}
+										}
+									}
+								}	
 								main.falldistance.put(targetPlayer.getUniqueId().toString(), targetPlayer.getFallDistance());
 								targetPlayer.sendMessage(ChatColor.GOLD + "You are now in CameraMode!");
 									if (superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
@@ -728,7 +746,21 @@ int ID;
 										pl.hidePlayer(targetPlayer);
 									}
 								}
-	
+								for(Entity mob : targetPlayer.getNearbyEntities(36, 36, 36)) {
+									if(mob.getType().equals(EntityType.BLAZE) || mob.getType().equals( EntityType.CAVE_SPIDER )|| mob.getType().equals(   EntityType.CREEPER) || mob.getType().equals(   EntityType.ENDERMAN )|| mob.getType().equals(   EntityType.GIANT) || mob.getType().equals(   EntityType.IRON_GOLEM )|| mob.getType().equals(   EntityType.PIG_ZOMBIE )|| mob.getType().equals(   EntityType.PLAYER )|| mob.getType().equals(   EntityType.SILVERFISH) || mob.getType().equals(   EntityType.SKELETON) || mob.getType().equals(   EntityType.SPIDER )|| mob.getType().equals(   EntityType.WITCH )|| mob.getType().equals(   EntityType.WITHER) || mob.getType().equals(   EntityType.ZOMBIE) || mob.getType().equals(   EntityType.WOLF)){
+										if(mob.getType().equals(EntityType.PLAYER)){
+											//* Potential Stuff Here*//
+										}else{
+											Creature mobs = (Creature) mob;
+											if(mobs.getTarget() != null && mobs.getTarget().equals((LivingEntity)targetPlayer)){
+												mobs.setTarget(null);
+												if(mob.getType().equals(EntityType.ENDERMAN)){
+													//main.enderman.put(targetPlayer.getUniqueId(), mob);
+												}
+											}
+										}
+									}
+								}
 								if (main.getConfig().getInt("CameraMode.CameraTimeLimit") > 0) {
 									sender.sendMessage(ChatColor.GREEN + "They have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 									targetPlayer.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
