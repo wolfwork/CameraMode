@@ -111,7 +111,7 @@ public class Events implements Listener {
 								public void run() {
 										main.pvpTimer.put(entiti.getUniqueId().toString(), main.pvpTimer.get(entiti.getUniqueId().toString()) - 1);
 										if (main.pvpTimer.get(entiti.getUniqueId().toString()) == 1){
-											Bukkit.getScheduler().cancelTask(ID);
+											Bukkit.getScheduler().cancelTask(IDS);
 										}
 								}
 							}, 0,20);
