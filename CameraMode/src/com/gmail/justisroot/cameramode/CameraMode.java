@@ -21,7 +21,7 @@ public class CameraMode extends JavaPlugin {
 	//######- Data Store -######//
 	//##########################//
 	
-    ArrayList<String> flyplayers = new ArrayList<String>();
+     ArrayList<String> flyplayers = new ArrayList<String>();
 	 HashMap<String, Integer> fireticks = new HashMap<String, Integer>();
 	 HashMap<String, Integer> breath = new HashMap<String, Integer>();
 	 ArrayList<String> pause = new ArrayList<String>();

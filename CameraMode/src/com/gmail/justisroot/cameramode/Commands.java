@@ -534,7 +534,7 @@ int ID;
 									sender.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 									public void run() {
-										if(main.flyplayers.contains(((Player) sender).getUniqueId())) {
+										if(main.flyplayers.contains(((Player)sender).getUniqueId().toString())) {
 											main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 											ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 												public void run() {
@@ -612,7 +612,7 @@ int ID;
   //###- CameraMode Other -###//
 		}else if (args.length == 1) {
 			if (sender instanceof Player) {
-				if (sender.hasPermission("cameramode.other") || args[0].equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
+				if (sender.hasPermission("cameramode.other") || args[0].equalsIgnoreCase(((Player) sender).getName().toString())) {
 					if (Bukkit.getServer().getPlayerExact(args[0]) != null){
 						final Player targetPlayer = Bukkit.getServer().getPlayerExact(args[0]);
 						final String superTarget = targetPlayer.getUniqueId().toString();
@@ -742,11 +742,15 @@ int ID;
 										}
 									}
 									if (main.getConfig().getInt("CameraMode.CameraTimeLimit") > 0) {
+										if (!superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
 										sender.sendMessage(ChatColor.GREEN + "They have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 										targetPlayer.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
+										}else{
+											targetPlayer.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
+										}
 										main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 										public void run() {
-											if(main.flyplayers.contains(targetPlayer.getUniqueId())) {
+											if(main.flyplayers.contains(targetPlayer.getUniqueId().toString())) {
 												main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 												ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 													public void run() {
@@ -775,8 +779,12 @@ int ID;
 												}, (long) 0.5);
 												main.flyplayers.remove(superTarget);
 												targetPlayer.addPotionEffects(main.effects.get(superTarget));
+												if (!superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
 												sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
 												targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+												}else{
+													targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+												}
 												int Fireup = main.fireticks.get(superTarget).intValue();
 												targetPlayer.setFireTicks(Fireup);
 												int air = main.breath.get(superTarget).intValue();
@@ -799,8 +807,12 @@ int ID;
 												targetPlayer.setRemainingAir(air);
 												Location loc = main.locations.get(superTarget);
 												targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+												if (!superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
 												sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
 												targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+												}else{
+													targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+												}
 												targetPlayer.addPotionEffects(main.effects.get(superTarget));
 												for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 													pl.showPlayer(targetPlayer);
@@ -870,7 +882,7 @@ int ID;
 									targetPlayer.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 									public void run() {
-										if(main.flyplayers.contains(targetPlayer.getUniqueId())) {
+										if(main.flyplayers.contains(targetPlayer.getUniqueId().toString())) {
 											main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 											ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 												public void run() {
