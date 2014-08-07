@@ -6,15 +6,15 @@ CameraMode:
     Updates:
         AutoUpdate: false
         NotifyOps: true
-    PvpTimer: 5
+    PvpTimer: 8
     PlayersInCM:
         AreInvincible: true
         AreVanished: false
         CanChangeWorlds: true
-        CanUseCommands: true
+        CanUseCommands: false
         AllowedCommands:
         - camera
         - cameramode
         - cm
-    CameraTimeLimit: 15
+    CameraTimeLimit: 35
     CameraCoolDown: 15
