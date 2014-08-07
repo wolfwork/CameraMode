@@ -594,6 +594,11 @@ int ID;
 										}
 									}
 									}, main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20);
+									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+										public void run() {
+											sender.sendMessage(ChatColor.RED + "You have 3 seconds.");
+										}
+										}, (main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20)-3);
 								}
 							}else{
 								sender.sendMessage(ChatColor.RED + "You cannot CameraMode while in battle! " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + main.pvpTimer.get(((Player) sender).getUniqueId().toString()).intValue() + ChatColor.DARK_GRAY + "]");
@@ -820,6 +825,11 @@ int ID;
 											}
 										}
 										}, main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20);
+										main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+											public void run() {
+												targetPlayer.sendMessage(ChatColor.RED + "You have 3 seconds.");
+											}
+											}, (main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20)-3);
 									}
 								}else{
 									sender.sendMessage(ChatColor.RED + args[0] + " is ccurrently battling. " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + main.pvpTimer.get(superTarget).intValue() + ChatColor.DARK_GRAY + "]");
@@ -944,6 +954,11 @@ int ID;
 										}
 									}
 									}, main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20);
+									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+										public void run() {
+											targetPlayer.sendMessage(ChatColor.RED + "You have 3 seconds.");
+										}
+										}, (main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20)-3);
 								}
 							}else{
 								sender.sendMessage(ChatColor.RED + args[0] + " is currently battling.");
