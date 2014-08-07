@@ -596,7 +596,7 @@ int ID;
 									}, main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20);
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 										public void run() {
-											sender.sendMessage(ChatColor.RED + "You have 3 seconds.");
+											sender.sendMessage(ChatColor.RED + "Powering Down...");
 										}
 										}, (main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20)-60);
 								}
@@ -827,7 +827,7 @@ int ID;
 										}, main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20);
 										main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 											public void run() {
-												targetPlayer.sendMessage(ChatColor.RED + "You have 3 seconds.");
+												targetPlayer.sendMessage(ChatColor.RED + "Powering Down...");
 											}
 											}, (main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20)-60);
 									}
@@ -956,7 +956,7 @@ int ID;
 									}, main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20);
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 										public void run() {
-											targetPlayer.sendMessage(ChatColor.RED + "You have 3 seconds.");
+											targetPlayer.sendMessage(ChatColor.RED + "Powering Down...");
 										}
 										}, (main.getConfig().getLong("CameraMode.CameraTimeLimit") * 20)-60);
 								}
