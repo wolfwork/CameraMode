@@ -8,7 +8,7 @@ commands:
         description: Puts player in cameramode
         aliases: [cm,cmode, cammode]
     camera reload:
-        usage: /cameramode reload
+        usage: /camera reload
         description: Reloads config
         aliases: [camera save]
     camera:
@@ -30,9 +30,6 @@ permissions:
     cameramode.cm:
         description: Gives access to cameramode
         default: true
-    cameramode.fly:
-        description: Allows players to survival fly even when not in camera mode. (only necessary if they have safefly.fly)
-        default: op
     cameramode.reload:
         description: Allows access to /camera reload
         default: op
