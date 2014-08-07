@@ -79,7 +79,7 @@ int ID;
 					sender.sendMessage(ChatColor.GRAY + "[2] " + ChatColor.DARK_AQUA + "CameraModed players are invincible: " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.AreInvincible"));
 					sender.sendMessage(ChatColor.GRAY + "[3] " + ChatColor.DARK_AQUA + "CameraModed players are vanished: " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.AreVanished"));
 					sender.sendMessage(ChatColor.GRAY + "[4] " + ChatColor.DARK_AQUA + "CameraModed players can change worlds: " + ChatColor.RED + main.getConfig().getString("CameraMode.PlayersInCM.CanChangeWorlds"));
-					sender.sendMessage(ChatColor.GRAY + "[5] " + ChatColor.DARK_AQUA + "Will automatically update when newer version is available: " + ChatColor.RED + main.getConfig().getString("CameraMode.Updates.AutoUpdate"));
+					sender.sendMessage(ChatColor.GRAY + "[5] " + ChatColor.DARK_AQUA + "Automatically update when newer version is available: " + ChatColor.RED + main.getConfig().getString("CameraMode.Updates.AutoUpdate"));
 					sender.sendMessage(ChatColor.GRAY + "[6] " + ChatColor.DARK_AQUA + "Notify Ops of newer available version: " + ChatColor.RED + main.getConfig().getString("CameraMode.Updates.NotifyOps"));
 					sender.sendMessage(ChatColor.AQUA + "To modify an option - " + ChatColor.GRAY + "/camera config (option#) (newValue)");
 					sender.sendMessage(ChatColor.AQUA + "To view available options and their #, - " + ChatColor.DARK_AQUA + "/camera config");
