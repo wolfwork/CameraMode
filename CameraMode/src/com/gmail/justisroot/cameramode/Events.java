@@ -263,10 +263,7 @@ public class Events implements Listener {
 	}
 	@EventHandler
 	public void onPlayerToggleFlight(PlayerToggleFlightEvent e) {
-	 if (!e.getPlayer().hasPermission("cameramode.fly") && (!(main.flyplayers.contains(e.getPlayer().getUniqueId().toString()))) && e.getPlayer().getGameMode() == (GameMode.SURVIVAL)) {
-		 e.getPlayer().setAllowFlight(false);
-		  }
-	 if (e.getPlayer().hasPermission("cameramode.fly") && (main.flyplayers.contains(e.getPlayer().getUniqueId().toString())) && e.getPlayer().getAllowFlight() == (false)) {
+	 if ((main.flyplayers.contains(e.getPlayer().getUniqueId().toString())) && e.getPlayer().getAllowFlight() == (false)) {
 		 e.getPlayer().setAllowFlight(true);
 	 }
 	}
