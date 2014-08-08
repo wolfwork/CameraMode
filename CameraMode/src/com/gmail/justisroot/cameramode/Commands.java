@@ -453,6 +453,15 @@ int IDX;
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
 						}
+						if(main.Check.contains(((Player)sender).getUniqueId())){
+						main.Check.remove(((Player)sender).getUniqueId());
+						}else if(main.Chec.contains(((Player)sender).getUniqueId())){
+						main.Chec.remove(((Player)sender).getUniqueId());
+						}else if(main.Che.contains(((Player)sender).getUniqueId())){
+						main.Che.remove(((Player)sender).getUniqueId());
+						}else{
+						sender.sendMessage("CameraMode: Produced a bug. Report to Dev");
+						}
 						main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 						IDC = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 							public void run() {
@@ -487,6 +496,15 @@ int IDX;
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(p);
 						}
+						if(main.Check.contains(((Player)sender).getUniqueId())){
+						main.Check.remove(((Player)sender).getUniqueId());
+						}else if(main.Chec.contains(((Player)sender).getUniqueId())){
+						main.Chec.remove(((Player)sender).getUniqueId());
+						}else if(main.Che.contains(((Player)sender).getUniqueId())){
+						main.Che.remove(((Player)sender).getUniqueId());
+						}else{
+						sender.sendMessage("CameraMode: Produced a bug. Report to Dev");
+						}
 						main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 						ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 							public void run() {
@@ -505,6 +523,7 @@ int IDX;
 						if (!(main.coolDown.containsKey(((Player) sender).getUniqueId()))) {
 	      /*On*/			if (!(main.pvpTimer.containsKey(((Player) sender).getUniqueId().toString()))) {
 								main.flyplayers.add(target);
+								main.Check.add(((Player)sender).getUniqueId());
 								main.falldistance.put(p.getUniqueId().toString(), p.getFallDistance());
 								main.vel.put(((Player) sender).getUniqueId().toString(), ((Player) sender).getVelocity());
 								main.locations.put(p.getUniqueId().toString(), p.getLocation());
@@ -540,62 +559,64 @@ int IDX;
 									sender.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 									public void run() {
-										if(main.flyplayers.contains(((Player)sender).getUniqueId().toString())) {
-											main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
-											IDK = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
-												public void run() {
-													if(main.coolDown.containsKey(((Player)sender).getUniqueId())){
-														main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
-														if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
+										if(main.Check.contains(((Player)sender).getUniqueId())){
+											if(main.flyplayers.contains(((Player)sender).getUniqueId().toString())) {
+												main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
+												IDK = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+													public void run() {
+														if(main.coolDown.containsKey(((Player)sender).getUniqueId())){
+															main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
+															if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
+																Bukkit.getScheduler().cancelTask(IDK);
+																main.coolDown.remove(((Player) sender).getUniqueId());
+															}
+														}else{
 															Bukkit.getScheduler().cancelTask(IDK);
-															main.coolDown.remove(((Player) sender).getUniqueId());
 														}
-													}else{
-														Bukkit.getScheduler().cancelTask(IDK);
 													}
+												}, 0,20);
+											}
+											if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
+												((Player) sender).setAllowFlight(false);
+												Location loc = main.locations.get(p.getUniqueId().toString());
+												p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+												CameraMode pInst = main;
+												p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
+												pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+													public void run() {
+														p.setVelocity(main.vel.get(p.getUniqueId().toString()));
+													}
+												}, (long) 0.5);
+												main.flyplayers.remove(target);
+												((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
+												sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+												int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
+												((Player) sender).setFireTicks(Fireup);
+												int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
+												((Player) sender).setRemainingAir(air);
+												for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+													pl.showPlayer(p);
 												}
-											}, 0,20);
-										}
-										if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
-											((Player) sender).setAllowFlight(false);
-											Location loc = main.locations.get(p.getUniqueId().toString());
-											p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-											CameraMode pInst = main;
-											p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
-											pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+											}else if (main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
+												CameraMode pInst = main;
+												pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 												public void run() {
-													p.setVelocity(main.vel.get(p.getUniqueId().toString()));
+												p.setVelocity(main.vel.get(p.getUniqueId().toString()));
 												}
-											}, (long) 0.5);
-											main.flyplayers.remove(target);
-											((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
-											sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-											int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
-											((Player) sender).setFireTicks(Fireup);
-											int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
-											((Player) sender).setRemainingAir(air);
-											for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-												pl.showPlayer(p);
-											}
-										}else if (main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
-											CameraMode pInst = main;
-											pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-											public void run() {
-											p.setVelocity(main.vel.get(p.getUniqueId().toString()));
-											}
-											}, 1L);
-											main.flyplayers.remove(target);
-											p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
-											int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
-											((Player) sender).setFireTicks(Fireup);
-											int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
-											((Player) sender).setRemainingAir(air);
-											Location loc = main.locations.get(p.getUniqueId().toString());
-											p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-											sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-											((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
-											for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-												pl.showPlayer(p);
+												}, 1L);
+												main.flyplayers.remove(target);
+												p.setFallDistance(main.falldistance.get(p.getUniqueId().toString()));
+												int Fireup = main.fireticks.get(((Player) sender).getUniqueId().toString()).intValue();
+												((Player) sender).setFireTicks(Fireup);
+												int air = main.breath.get(((Player) sender).getUniqueId().toString()).intValue();
+												((Player) sender).setRemainingAir(air);
+												Location loc = main.locations.get(p.getUniqueId().toString());
+												p.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+												sender.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+												((Player) sender).addPotionEffects(main.effects.get(((Player) sender).getUniqueId().toString()));
+												for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+													pl.showPlayer(p);
+												}
 											}
 										}
 									}
@@ -656,6 +677,15 @@ int IDX;
 							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 								pl.showPlayer(targetPlayer);
 							}
+							if(main.Check.contains(targetPlayer.getUniqueId())){
+								main.Check.remove(targetPlayer.getUniqueId());
+								}else if(main.Chec.contains(targetPlayer.getUniqueId())){
+								main.Chec.remove(targetPlayer.getUniqueId());
+								}else if(main.Che.contains(targetPlayer.getUniqueId())){
+								main.Che.remove(targetPlayer.getUniqueId());
+								}else{
+								sender.sendMessage("CameraMode: Produced a bug. Report to Dev");
+								}
 							main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 							IDA = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
@@ -696,6 +726,15 @@ int IDX;
 							for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 								pl.showPlayer(targetPlayer);
 							}
+							if(main.Check.contains(targetPlayer.getUniqueId())){
+								main.Check.remove(targetPlayer.getUniqueId());
+								}else if(main.Chec.contains(targetPlayer.getUniqueId())){
+								main.Chec.remove(targetPlayer.getUniqueId());
+								}else if(main.Che.contains(targetPlayer.getUniqueId())){
+								main.Che.remove(targetPlayer.getUniqueId());
+								}else{
+								sender.sendMessage("CameraMode: Produced a bug. Report to Dev");
+								}
 							main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 							IDB = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
@@ -714,6 +753,7 @@ int IDX;
 							if (!(main.coolDown.containsKey(targetPlayer.getUniqueId()))){
 								if (!(main.pvpTimer.containsKey(superTarget))){
 								main.flyplayers.add(superTarget);
+								main.Chec.add(targetPlayer.getUniqueId());
 								main.locations.put(superTarget, targetPlayer.getLocation());
 								targetPlayer.setAllowFlight(true);
 								main.fireticks.put(superTarget, targetPlayer.getFireTicks());
@@ -761,72 +801,74 @@ int IDX;
 										}
 										main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 										public void run() {
-											if(main.flyplayers.contains(targetPlayer.getUniqueId().toString())) {
-												main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
-												IDD = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
-													public void run() {
-														if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
-															main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-															if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
+											if(main.Chec.contains(targetPlayer.getUniqueId())){
+												if(main.flyplayers.contains(targetPlayer.getUniqueId().toString())) {
+													main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
+													IDD = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+														public void run() {
+															if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
+																main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+																if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
+																	Bukkit.getScheduler().cancelTask(IDD);
+																	main.coolDown.remove(targetPlayer.getUniqueId());
+																}
+															}else{
 																Bukkit.getScheduler().cancelTask(IDD);
-																main.coolDown.remove(targetPlayer.getUniqueId());
 															}
-														}else{
-															Bukkit.getScheduler().cancelTask(IDD);
 														}
+													}, 0,20);
+												}
+												if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
+													targetPlayer.setAllowFlight(false);
+													Location loc = main.locations.get(superTarget);
+													targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+													CameraMode pInst = main;
+													targetPlayer.setFallDistance(main.falldistance.get(superTarget));
+													pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+														public void run() {
+															targetPlayer.setVelocity(main.vel.get(superTarget));
+														}
+													}, (long) 0.5);
+													main.flyplayers.remove(superTarget);
+													targetPlayer.addPotionEffects(main.effects.get(superTarget));
+													if (!superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
+													sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
+													targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+													}else{
+														targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
 													}
-												}, 0,20);
-											}
-											if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
-												targetPlayer.setAllowFlight(false);
-												Location loc = main.locations.get(superTarget);
-												targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-												CameraMode pInst = main;
-												targetPlayer.setFallDistance(main.falldistance.get(superTarget));
-												pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+													int Fireup = main.fireticks.get(superTarget).intValue();
+													targetPlayer.setFireTicks(Fireup);
+													int air = main.breath.get(superTarget).intValue();
+													targetPlayer.setRemainingAir(air);
+													for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+														pl.showPlayer(targetPlayer);
+													}
+												}else if (main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
+													CameraMode pInst = main;
+													pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 													public void run() {
-														targetPlayer.setVelocity(main.vel.get(superTarget));
+													targetPlayer.setVelocity(main.vel.get(superTarget));
 													}
-												}, (long) 0.5);
-												main.flyplayers.remove(superTarget);
-												targetPlayer.addPotionEffects(main.effects.get(superTarget));
-												if (!superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
-												sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
-												targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-												}else{
+													}, 1L);
+													main.flyplayers.remove(superTarget);
+													targetPlayer.setFallDistance(main.falldistance.get(superTarget));
+													int Fireup = main.fireticks.get(superTarget).intValue();
+													targetPlayer.setFireTicks(Fireup);
+													int air = main.breath.get(superTarget).intValue();
+													targetPlayer.setRemainingAir(air);
+													Location loc = main.locations.get(superTarget);
+													targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+													if (!superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
+													sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
 													targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-												}
-												int Fireup = main.fireticks.get(superTarget).intValue();
-												targetPlayer.setFireTicks(Fireup);
-												int air = main.breath.get(superTarget).intValue();
-												targetPlayer.setRemainingAir(air);
-												for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-													pl.showPlayer(targetPlayer);
-												}
-											}else if (main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
-												CameraMode pInst = main;
-												pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-												public void run() {
-												targetPlayer.setVelocity(main.vel.get(superTarget));
-												}
-												}, 1L);
-												main.flyplayers.remove(superTarget);
-												targetPlayer.setFallDistance(main.falldistance.get(superTarget));
-												int Fireup = main.fireticks.get(superTarget).intValue();
-												targetPlayer.setFireTicks(Fireup);
-												int air = main.breath.get(superTarget).intValue();
-												targetPlayer.setRemainingAir(air);
-												Location loc = main.locations.get(superTarget);
-												targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-												if (!superTarget.equalsIgnoreCase(((Player) sender).getUniqueId().toString())) {
-												sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
-												targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-												}else{
-													targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-												}
-												targetPlayer.addPotionEffects(main.effects.get(superTarget));
-												for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-													pl.showPlayer(targetPlayer);
+													}else{
+														targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+													}
+													targetPlayer.addPotionEffects(main.effects.get(superTarget));
+													for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+														pl.showPlayer(targetPlayer);
+													}
 												}
 											}
 										}
@@ -862,6 +904,7 @@ int IDX;
 						if (!(main.coolDown.containsKey(targetPlayer.getUniqueId()))){
 							if (!(main.pvpTimer.containsKey(superTarget))){
 								main.flyplayers.add(superTarget);
+								main.Che.add(targetPlayer.getUniqueId());
 								main.locations.put(superTarget, targetPlayer.getLocation());
 								targetPlayer.setAllowFlight(true);
 								main.fireticks.put(superTarget, targetPlayer.getFireTicks());
@@ -900,64 +943,66 @@ int IDX;
 									targetPlayer.sendMessage(ChatColor.GREEN + "You have " + (main.getConfig().getInt("CameraMode.CameraTimeLimit") + " seconds."));
 									main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
 									public void run() {
-										if(main.flyplayers.contains(targetPlayer.getUniqueId().toString())) {
-											main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
-											IDZ = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
-												public void run() {
-													if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
-														main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-														if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
+										if(main.Che.contains(targetPlayer.getUniqueId())){
+											if(main.flyplayers.contains(targetPlayer.getUniqueId().toString())) {
+												main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
+												IDZ = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
+													public void run() {
+														if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
+															main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+															if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
+																Bukkit.getScheduler().cancelTask(IDZ);
+																main.coolDown.remove(targetPlayer.getUniqueId());
+															}
+														}else{
 															Bukkit.getScheduler().cancelTask(IDZ);
-															main.coolDown.remove(targetPlayer.getUniqueId());
 														}
-													}else{
-														Bukkit.getScheduler().cancelTask(IDZ);
 													}
+												}, 0,20);
+											}
+											if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
+												targetPlayer.setAllowFlight(false);
+												Location loc = main.locations.get(superTarget);
+												targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+												CameraMode pInst = main;
+												targetPlayer.setFallDistance(main.falldistance.get(superTarget));
+												pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+													public void run() {
+														targetPlayer.setVelocity(main.vel.get(superTarget));
+													}
+												}, (long) 0.5);
+												main.flyplayers.remove(superTarget);
+												targetPlayer.addPotionEffects(main.effects.get(superTarget));
+												sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
+												targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+												int Fireup = main.fireticks.get(superTarget).intValue();
+												targetPlayer.setFireTicks(Fireup);
+												int air = main.breath.get(superTarget).intValue();
+												targetPlayer.setRemainingAir(air);
+												for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+													pl.showPlayer(targetPlayer);
 												}
-											}, 0,20);
-										}
-										if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
-											targetPlayer.setAllowFlight(false);
-											Location loc = main.locations.get(superTarget);
-											targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-											CameraMode pInst = main;
-											targetPlayer.setFallDistance(main.falldistance.get(superTarget));
-											pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
+											}else if (main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
+												CameraMode pInst = main;
+												pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
 												public void run() {
-													targetPlayer.setVelocity(main.vel.get(superTarget));
+												targetPlayer.setVelocity(main.vel.get(superTarget));
 												}
-											}, (long) 0.5);
-											main.flyplayers.remove(superTarget);
-											targetPlayer.addPotionEffects(main.effects.get(superTarget));
-											sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
-											targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-											int Fireup = main.fireticks.get(superTarget).intValue();
-											targetPlayer.setFireTicks(Fireup);
-											int air = main.breath.get(superTarget).intValue();
-											targetPlayer.setRemainingAir(air);
-											for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-												pl.showPlayer(targetPlayer);
-											}
-										}else if (main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
-											CameraMode pInst = main;
-											pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
-											public void run() {
-											targetPlayer.setVelocity(main.vel.get(superTarget));
-											}
-											}, 1L);
-											main.flyplayers.remove(superTarget);
-											targetPlayer.setFallDistance(main.falldistance.get(superTarget));
-											int Fireup = main.fireticks.get(superTarget).intValue();
-											targetPlayer.setFireTicks(Fireup);
-											int air = main.breath.get(superTarget).intValue();
-											targetPlayer.setRemainingAir(air);
-											Location loc = main.locations.get(superTarget);
-											targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
-											sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
-											targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
-											targetPlayer.addPotionEffects(main.effects.get(superTarget));
-											for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-												pl.showPlayer(targetPlayer);
+												}, 1L);
+												main.flyplayers.remove(superTarget);
+												targetPlayer.setFallDistance(main.falldistance.get(superTarget));
+												int Fireup = main.fireticks.get(superTarget).intValue();
+												targetPlayer.setFireTicks(Fireup);
+												int air = main.breath.get(superTarget).intValue();
+												targetPlayer.setRemainingAir(air);
+												Location loc = main.locations.get(superTarget);
+												targetPlayer.teleport(new Location (loc.getWorld(),loc.getX(),loc.getY(),loc.getZ(),loc.getYaw(),loc.getPitch()));
+												sender.sendMessage(ChatColor.RED + targetPlayer.getName() + " is no longer in CameraMode!");
+												targetPlayer.sendMessage(ChatColor.RED +  "You are no longer in CameraMode!");
+												targetPlayer.addPotionEffects(main.effects.get(superTarget));
+												for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+													pl.showPlayer(targetPlayer);
+												}
 											}
 										}
 									}
@@ -1000,6 +1045,15 @@ int IDX;
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(targetPlayer);
 						}
+						if(main.Check.contains(targetPlayer.getUniqueId())){
+							main.Check.remove(targetPlayer.getUniqueId());
+							}else if(main.Chec.contains(targetPlayer.getUniqueId())){
+							main.Chec.remove(targetPlayer.getUniqueId());
+							}else if(main.Che.contains(targetPlayer.getUniqueId())){
+							main.Che.remove(targetPlayer.getUniqueId());
+							}else{
+							sender.sendMessage("CameraMode: Produced a bug. Report to Dev");
+							}
 						main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 						IDY = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 							public void run() {
@@ -1036,6 +1090,15 @@ int IDX;
 						for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
 							pl.showPlayer(targetPlayer);
 						}
+						if(main.Check.contains(targetPlayer.getUniqueId())){
+							main.Check.remove(targetPlayer.getUniqueId());
+							}else if(main.Chec.contains(targetPlayer.getUniqueId())){
+							main.Chec.remove(targetPlayer.getUniqueId());
+							}else if(main.Che.contains(targetPlayer.getUniqueId())){
+							main.Che.remove(targetPlayer.getUniqueId());
+							}else{
+							sender.sendMessage("CameraMode: Produced a bug. Report to Dev");
+							}
 						main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 						IDX = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 							public void run() {
