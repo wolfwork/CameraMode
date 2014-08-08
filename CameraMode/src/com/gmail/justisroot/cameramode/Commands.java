@@ -46,10 +46,10 @@ int IDX;
 				sender.sendMessage(ChatColor.RED + "You do not have permission.");
 			}
 			if (sender.hasPermission("cameramode.cm")){
-				sender.sendMessage(ChatColor.DARK_AQUA + "/cameramode  (or /cm)" + ChatColor.GRAY + "  - Enables CameraMode");
+				sender.sendMessage(ChatColor.DARK_AQUA + "/cameramode  " + ChatColor.DARK_GRAY + "(or /cm)" + ChatColor.GRAY + "  - Enables CameraMode");
 			}
 			if (sender.hasPermission("cameramode.other")){
-				sender.sendMessage(ChatColor.DARK_AQUA + "/cameramode {player}" + ChatColor.GRAY + "  - Enables CameraMode");
+				sender.sendMessage(ChatColor.DARK_AQUA + "/cameramode {player}" + ChatColor.GRAY + "  - Enables CM For Specifide Player");
 			}
 			if (sender.hasPermission("cameramode.config")) {
 				sender.sendMessage(ChatColor.DARK_AQUA + "/camera config" + ChatColor.GRAY + "  - Configure CameraMode");
