@@ -459,15 +459,10 @@ int IDX;
 									main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
 									if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(IDC);
+										main.coolDown.remove(((Player) sender).getUniqueId());
 									}
 							}
 						}, 0,20);
-						main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-							public void run() {
-								main.coolDown.remove(((Player) sender).getUniqueId());
-							}
-						},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
-						
   /*Creative*/		}else if (main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
 	  /*off*/	
 						main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
@@ -494,15 +489,10 @@ int IDX;
 									main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
 									if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(ID);
+										main.coolDown.remove(((Player) sender).getUniqueId());
 									}
 							}
 						}, 0,20);
-						main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-							public void run() {
-								main.coolDown.remove(((Player) sender).getUniqueId());
-							}
-						},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
-						
 					}else{
 						if (!(main.coolDown.containsKey(((Player) sender).getUniqueId()))) {
 	      /*On*/			if (!(main.pvpTimer.containsKey(((Player) sender).getUniqueId().toString()))) {
@@ -549,14 +539,10 @@ int IDX;
 														main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
 														if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
 															Bukkit.getScheduler().cancelTask(IDK);
+															main.coolDown.remove(((Player) sender).getUniqueId());
 														}
 												}
 											}, 0,20);
-											main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-												public void run() {
-													main.coolDown.remove(((Player) sender).getUniqueId());
-												}
-											},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
 										}
 										if(main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.SURVIVAL)) {
 											((Player) sender).setAllowFlight(false);
@@ -664,15 +650,10 @@ int IDX;
 										main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
 										if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 											Bukkit.getScheduler().cancelTask(IDA);
+											main.coolDown.remove(targetPlayer.getUniqueId());
 										}
 								}
 							}, 0,20);
-							main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-								public void run() {
-									main.coolDown.remove(targetPlayer.getUniqueId());
-								}
-							},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
-							
 						}else if (main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
 							CameraMode pInst = main;
 							pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
@@ -705,15 +686,10 @@ int IDX;
 										main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
 										if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 											Bukkit.getScheduler().cancelTask(IDB);
+											main.coolDown.remove(targetPlayer.getUniqueId());
 										}
 								}
 							}, 0,20);
-							main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-								public void run() {
-									main.coolDown.remove(targetPlayer.getUniqueId());
-								}
-							},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
-							
 						}else{
 							if (!(main.coolDown.containsKey(targetPlayer))){
 								if (!(main.pvpTimer.containsKey(superTarget))){
@@ -772,14 +748,10 @@ int IDX;
 															main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
 															if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 																Bukkit.getScheduler().cancelTask(IDD);
+																main.coolDown.remove(targetPlayer.getUniqueId());
 															}
 													}
 												}, 0,20);
-												main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-													public void run() {
-														main.coolDown.remove(targetPlayer.getUniqueId());
-													}
-												},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
 											}
 											if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
 												targetPlayer.setAllowFlight(false);
@@ -911,14 +883,10 @@ int IDX;
 														main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
 														if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 															Bukkit.getScheduler().cancelTask(IDZ);
+															main.coolDown.remove(targetPlayer.getUniqueId());
 														}
 												}
 											}, 0,20);
-											main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-												public void run() {
-													main.coolDown.remove(targetPlayer.getUniqueId());
-												}
-											},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
 										}
 										if(main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.SURVIVAL)) {
 											targetPlayer.setAllowFlight(false);
@@ -1010,15 +978,10 @@ int IDX;
 									main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
 									if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(IDY);
+										main.coolDown.remove(targetPlayer.getUniqueId());
 									}
 							}
 						}, 0,20);
-						main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-							public void run() {
-								main.coolDown.remove(targetPlayer.getUniqueId());
-							}
-						},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
-						
 					}else{
 						CameraMode pInst = main;
 						pInst.getServer().getScheduler().scheduleSyncDelayedTask(pInst, new Runnable(){
@@ -1047,14 +1010,10 @@ int IDX;
 									main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
 									if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(IDX);
+										main.coolDown.remove(targetPlayer.getUniqueId());
 									}
 							}
 						}, 0,20);
-						main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-							public void run() {
-								main.coolDown.remove(targetPlayer.getUniqueId());
-							}
-						},20 * main.getConfig().getInt("CameraMode.CameraCoolDown"));
 					}
 				}else{
 					sender.sendMessage(ChatColor.RED + args[0] + " is not online.");
