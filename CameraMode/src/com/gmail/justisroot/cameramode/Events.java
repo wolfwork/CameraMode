@@ -91,11 +91,15 @@ public class Events implements Listener {
 							main.looper.add(player.getUniqueId());
 							ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
+									if(main.pvpTimer.containsKey(player.getUniqueId())){
 										main.pvpTimer.put(player.getUniqueId().toString(), main.pvpTimer.get(player.getUniqueId().toString()) - 1);
 										if (main.pvpTimer.get(player.getUniqueId().toString()) == 0){
 											Bukkit.getScheduler().cancelTask(ID);
 											main.pvpTimer.remove(player.getUniqueId().toString());
 										}
+									}else{
+										Bukkit.getScheduler().cancelTask(ID);
+									}
 								}
 							}, 0,20);
 								
@@ -123,11 +127,15 @@ public class Events implements Listener {
 							main.pvpTimer.put(e.getEntity().getUniqueId().toString(), main.getConfig().getInt("CameraMode.PvpTimer") + 1);
 							IDS = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
+									if (main.pvpTimer.containsKey(entiti.getUniqueId().toString())){
 										main.pvpTimer.put(entiti.getUniqueId().toString(), main.pvpTimer.get(entiti.getUniqueId().toString()) - 1);
 										if (main.pvpTimer.get(entiti.getUniqueId().toString()) == 0){
 											Bukkit.getScheduler().cancelTask(IDS);
 											main.pvpTimer.remove(entiti.getUniqueId().toString());
 										}
+									}else{
+										Bukkit.getScheduler().cancelTask(IDS);
+									}
 								}
 							}, 0,20);
 								
