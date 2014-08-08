@@ -711,7 +711,7 @@ int IDX;
 								}
 							}, 0,20);
 						}else{
-							if (!(main.coolDown.containsKey(targetPlayer))){
+							if (!(main.coolDown.containsKey(targetPlayer.getUniqueId()))){
 								if (!(main.pvpTimer.containsKey(superTarget))){
 								main.flyplayers.add(superTarget);
 								main.locations.put(superTarget, targetPlayer.getLocation());
@@ -859,7 +859,7 @@ int IDX;
 					final Player targetPlayer = Bukkit.getServer().getPlayerExact(args[0]);
 					final String superTarget = targetPlayer.getUniqueId().toString();
 					if (!(main.flyplayers.contains(superTarget))){
-						if (!(main.coolDown.containsKey(targetPlayer))){
+						if (!(main.coolDown.containsKey(targetPlayer.getUniqueId()))){
 							if (!(main.pvpTimer.containsKey(superTarget))){
 								main.flyplayers.add(superTarget);
 								main.locations.put(superTarget, targetPlayer.getLocation());
