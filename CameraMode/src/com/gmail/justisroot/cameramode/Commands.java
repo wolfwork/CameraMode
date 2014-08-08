@@ -458,13 +458,13 @@ int IDX;
 							public void run() {
 								if(main.coolDown.containsKey(((Player)sender).getUniqueId())){
 									main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
-								}else{
-									Bukkit.getScheduler().cancelTask(IDC);
-								}
 									if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(IDC);
 										main.coolDown.remove(((Player) sender).getUniqueId());
 									}
+								}else{
+									Bukkit.getScheduler().cancelTask(IDC);
+								}
 							}
 						}, 0,20);
   /*Creative*/		}else if (main.flyplayers.contains(target) && ((Player) sender).getGameMode() == (GameMode.CREATIVE)) {
@@ -492,13 +492,13 @@ int IDX;
 							public void run() {
 								if(main.coolDown.containsKey(((Player)sender).getUniqueId())){
 									main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
-								}else{
-									Bukkit.getScheduler().cancelTask(ID);
-								}
 									if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(ID);
 										main.coolDown.remove(((Player) sender).getUniqueId());
 									}
+								}else{
+									Bukkit.getScheduler().cancelTask(ID);
+								}
 							}
 						}, 0,20);
 					}else{
@@ -546,13 +546,13 @@ int IDX;
 												public void run() {
 													if(main.coolDown.containsKey(((Player)sender).getUniqueId())){
 														main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
-													}else{
-														Bukkit.getScheduler().cancelTask(IDK);
-													}
 														if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
 															Bukkit.getScheduler().cancelTask(IDK);
 															main.coolDown.remove(((Player) sender).getUniqueId());
 														}
+													}else{
+														Bukkit.getScheduler().cancelTask(IDK);
+													}
 												}
 											}, 0,20);
 										}
@@ -661,13 +661,13 @@ int IDX;
 								public void run() {
 									if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 										main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-									}else{
-										Bukkit.getScheduler().cancelTask(IDA);
-									}
 										if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 											Bukkit.getScheduler().cancelTask(IDA);
 											main.coolDown.remove(targetPlayer.getUniqueId());
 										}
+									}else{
+										Bukkit.getScheduler().cancelTask(IDA);
+									}
 								}
 							}, 0,20);
 						}else if (main.flyplayers.contains(superTarget) && targetPlayer.getGameMode() == (GameMode.CREATIVE)) {
@@ -701,13 +701,13 @@ int IDX;
 								public void run() {
 									if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 										main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-									}else{
-										Bukkit.getScheduler().cancelTask(IDB);
-									}
 										if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 											Bukkit.getScheduler().cancelTask(IDB);
 											main.coolDown.remove(targetPlayer.getUniqueId());
 										}
+									}else{
+										Bukkit.getScheduler().cancelTask(IDB);
+									}
 								}
 							}, 0,20);
 						}else{
@@ -767,13 +767,13 @@ int IDX;
 													public void run() {
 														if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 															main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-														}else{
-															Bukkit.getScheduler().cancelTask(IDD);
-														}
 															if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 																Bukkit.getScheduler().cancelTask(IDD);
 																main.coolDown.remove(targetPlayer.getUniqueId());
 															}
+														}else{
+															Bukkit.getScheduler().cancelTask(IDD);
+														}
 													}
 												}, 0,20);
 											}
@@ -906,13 +906,13 @@ int IDX;
 												public void run() {
 													if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 														main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-													}else{
-														Bukkit.getScheduler().cancelTask(IDZ);
-													}
 														if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 															Bukkit.getScheduler().cancelTask(IDZ);
 															main.coolDown.remove(targetPlayer.getUniqueId());
 														}
+													}else{
+														Bukkit.getScheduler().cancelTask(IDZ);
+													}
 												}
 											}, 0,20);
 										}
@@ -1005,13 +1005,13 @@ int IDX;
 							public void run() {
 								if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 									main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-								}else{
-									Bukkit.getScheduler().cancelTask(IDY);
-								}
 									if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(IDY);
 										main.coolDown.remove(targetPlayer.getUniqueId());
 									}
+								}else{
+									Bukkit.getScheduler().cancelTask(IDY);
+								}
 							}
 						}, 0,20);
 					}else{
@@ -1041,13 +1041,13 @@ int IDX;
 							public void run() {
 								if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 									main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
-								}else{
-									Bukkit.getScheduler().cancelTask(IDX);
-								}
 									if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(IDX);
 										main.coolDown.remove(targetPlayer.getUniqueId());
 									}
+								}else{
+									Bukkit.getScheduler().cancelTask(IDX);
+								}
 							}
 						}, 0,20);
 					}
