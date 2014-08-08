@@ -456,7 +456,11 @@ int IDX;
 						main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 						IDC = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 							public void run() {
+								if(main.coolDown.containsKey(((Player)sender).getUniqueId())){
 									main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
+								}else{
+									Bukkit.getScheduler().cancelTask(IDC);
+								}
 									if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(IDC);
 										main.coolDown.remove(((Player) sender).getUniqueId());
@@ -486,7 +490,11 @@ int IDX;
 						main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 						ID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 							public void run() {
+								if(main.coolDown.containsKey(((Player)sender).getUniqueId())){
 									main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
+								}else{
+									Bukkit.getScheduler().cancelTask(ID);
+								}
 									if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(ID);
 										main.coolDown.remove(((Player) sender).getUniqueId());
@@ -536,7 +544,11 @@ int IDX;
 											main.coolDown.put(((Player) sender).getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 											IDK = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 												public void run() {
+													if(main.coolDown.containsKey(((Player)sender).getUniqueId())){
 														main.coolDown.put(((Player) sender).getUniqueId(), main.coolDown.get(((Player) sender).getUniqueId()) - 1);
+													}else{
+														Bukkit.getScheduler().cancelTask(IDK);
+													}
 														if (main.coolDown.get(((Player) sender).getUniqueId()) == 1){
 															Bukkit.getScheduler().cancelTask(IDK);
 															main.coolDown.remove(((Player) sender).getUniqueId());
@@ -647,7 +659,11 @@ int IDX;
 							main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 							IDA = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
+									if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 										main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+									}else{
+										Bukkit.getScheduler().cancelTask(IDA);
+									}
 										if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 											Bukkit.getScheduler().cancelTask(IDA);
 											main.coolDown.remove(targetPlayer.getUniqueId());
@@ -683,7 +699,11 @@ int IDX;
 							main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 							IDB = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 								public void run() {
+									if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 										main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+									}else{
+										Bukkit.getScheduler().cancelTask(IDB);
+									}
 										if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 											Bukkit.getScheduler().cancelTask(IDB);
 											main.coolDown.remove(targetPlayer.getUniqueId());
@@ -745,7 +765,11 @@ int IDX;
 												main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 												IDD = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 													public void run() {
+														if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 															main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+														}else{
+															Bukkit.getScheduler().cancelTask(IDD);
+														}
 															if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 																Bukkit.getScheduler().cancelTask(IDD);
 																main.coolDown.remove(targetPlayer.getUniqueId());
@@ -880,7 +904,11 @@ int IDX;
 											main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 											IDZ = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 												public void run() {
+													if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 														main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+													}else{
+														Bukkit.getScheduler().cancelTask(IDZ);
+													}
 														if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 															Bukkit.getScheduler().cancelTask(IDZ);
 															main.coolDown.remove(targetPlayer.getUniqueId());
@@ -975,7 +1003,11 @@ int IDX;
 						main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 						IDY = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 							public void run() {
+								if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 									main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+								}else{
+									Bukkit.getScheduler().cancelTask(IDY);
+								}
 									if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(IDY);
 										main.coolDown.remove(targetPlayer.getUniqueId());
@@ -1007,7 +1039,11 @@ int IDX;
 						main.coolDown.put(targetPlayer.getUniqueId(), main.getConfig().getInt("CameraMode.CameraCoolDown"));
 						IDX = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable(){
 							public void run() {
+								if(main.coolDown.containsKey(targetPlayer.getUniqueId())){
 									main.coolDown.put(targetPlayer.getUniqueId(), main.coolDown.get(targetPlayer.getUniqueId()) - 1);
+								}else{
+									Bukkit.getScheduler().cancelTask(IDX);
+								}
 									if (main.coolDown.get(targetPlayer.getUniqueId()) == 1){
 										Bukkit.getScheduler().cancelTask(IDX);
 										main.coolDown.remove(targetPlayer.getUniqueId());
