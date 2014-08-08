@@ -41,18 +41,21 @@ int IDX;
 		if (args.length == 0) { 
 			if (sender.hasPermission("cameramode.cm") || (sender.hasPermission("cameramode.reload")) || (sender.hasPermission("cameramode.camera")) || (sender.hasPermission("cameramode.config"))) {
 				sender.sendMessage(ChatColor.AQUA + "__CameraMode Commands__");
-				sender.sendMessage(ChatColor.DARK_AQUA + "/Camera" + ChatColor.GRAY + "  - Displays main Help List");
+				sender.sendMessage(ChatColor.DARK_AQUA + "/camera" + ChatColor.GRAY + "  - Displays main help list");
 			}else{
 				sender.sendMessage(ChatColor.RED + "You do not have permission.");
 			}
 			if (sender.hasPermission("cameramode.cm")){
-				sender.sendMessage(ChatColor.DARK_AQUA + "/CameraMode" + ChatColor.GRAY + "  - Enables CameraMode");
+				sender.sendMessage(ChatColor.DARK_AQUA + "/cameramode  (or /cm)" + ChatColor.GRAY + "  - Enables CameraMode");
+			}
+			if (sender.hasPermission("cameramode.other")){
+				sender.sendMessage(ChatColor.DARK_AQUA + "/cameramode {player}" + ChatColor.GRAY + "  - Enables CameraMode");
 			}
 			if (sender.hasPermission("cameramode.config")) {
-				sender.sendMessage(ChatColor.DARK_AQUA + "/Camera config" + ChatColor.GRAY + "  - Configure CameraMode");
+				sender.sendMessage(ChatColor.DARK_AQUA + "/camera config" + ChatColor.GRAY + "  - Configure CameraMode");
 			}
 			if (sender.hasPermission("cameramode.reload")) {
-				sender.sendMessage(ChatColor.DARK_AQUA + "/Camera reload" + ChatColor.GRAY + "  - Reloads the Configuration");
+				sender.sendMessage(ChatColor.DARK_AQUA + "/camera reload" + ChatColor.GRAY + "  - Reloads the Configuration");
 			}
 		//########################//
 		//#######- Reload -#######//
